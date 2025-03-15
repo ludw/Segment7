@@ -171,4 +171,18 @@
             <listEntry value="37">Millitary Date Time Group</listEntry>
         </settingConfig>
     </setting>
+
+    <setting propertyKey="@Properties.dateFormat" title="Date format">
+        <settingConfig type="list">
+            <listEntry value="0">WEEKDAY DD</listEntry>
+            <listEntry value="1">YYYY-MM-DD</listEntry>
+            <listEntry value="2">MM/DD/YYYY</listEntry>
+            <listEntry value="3">DD.MM.YYYY</listEntry>
+            <listEntry value="4">WEEKDAY DD MONTH</listEntry>
+            <listEntry value="5">DD MONTH</listEntry>
+            <listEntry value="6">DD MONTH (Week)</listEntry>
+            <listEntry value="7">WEEKDAY DD (Week)</listEntry>
+        </settingConfig>
+    </setting>
+
 </settings>

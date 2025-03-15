@@ -4,5 +4,6 @@
     <property id="fieldTopRight" type="number">0</property>
     <property id="fieldBottomLeft" type="number">0</property>
     <property id="fieldBottomRight" type="number">0</property>
+    <property id="dateFormat" type="number">0</property>
 
 </properties>

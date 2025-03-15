@@ -31,6 +31,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propFieldTopRight as Number = 0;
     hidden var propFieldBottomLeft as Number = 0;
     hidden var propFieldBottomRight as Number = 0;
+    hidden var propDateFormat as Number = 0;
 
     function initialize() {
         WatchFace.initialize();
@@ -49,6 +50,12 @@ class Segment7View extends WatchUi.WatchFace {
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
             clockHeight = 72;
             clockWidth = 207;
+            dataHeight = 20;
+        } else if(screenHeight > 280 and screenHeight < 416) {
+            fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
+            fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+            clockHeight = 100;
+            clockWidth = 300;
             dataHeight = 20;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
@@ -142,6 +149,7 @@ class Segment7View extends WatchUi.WatchFace {
         propFieldTopRight = Application.Properties.getValue("fieldTopRight") as Number;
         propFieldBottomLeft = Application.Properties.getValue("fieldBottomLeft") as Number;
         propFieldBottomRight = Application.Properties.getValue("fieldBottomRight") as Number;
+        propDateFormat = Application.Properties.getValue("dateFormat") as Number;
     }
 
     hidden function updateData() as Void {
@@ -408,10 +416,9 @@ class Segment7View extends WatchUi.WatchFace {
         var now = Time.now();
         var today = Time.Gregorian.info(now, Time.FORMAT_SHORT);
         var value = "";
-        var propDateFormat = 0;
 
         switch(propDateFormat) {
-            case 0: // Default: THU, 14
+            case 0: // Default: THU 14
                 value = Lang.format("$1$ $2$", [
                     dayName(today.day_of_week),
                     today.day
@@ -438,56 +445,34 @@ class Segment7View extends WatchUi.WatchFace {
                     today.year
                 ]);
                 break;
-            case 4: // THU, 14 MAR (Week number)
-                value = Lang.format("$1$, $2$ $3$ (W$4$)", [
-                    dayName(today.day_of_week),
-                    today.day,
-                    monthName(today.month),
-                    isoWeekNumber(today.year, today.month, today.day)
-                ]);
-                break;
-            case 5: // THU, 14 MAR 2024 (Week number)
-                value = Lang.format("$1$, $2$ $3$ $4$ (W$5$)", [
-                    dayName(today.day_of_week),
-                    today.day,
-                    monthName(today.month),
-                    today.year,
-                    isoWeekNumber(today.year, today.month, today.day)
-                ]);
-                break;
-            case 6: // WEEKDAY, DD MONTH
-                value = Lang.format("$1$, $2$ $3$", [
+             case 4: // THU 14 MAR
+                value = Lang.format("$1$ $2$ $3$", [
                     dayName(today.day_of_week),
                     today.day,
                     monthName(today.month)
                 ]);
                 break;
-            case 7: // WEEKDAY, YYYY-MM-DD
-                value = Lang.format("$1$, $2$-$3$-$4$", [
-                    dayName(today.day_of_week),
-                    today.year,
-                    today.month.format("%02d"),
-                    today.day.format("%02d")
+            case 5: // 14 MAR
+                value = Lang.format("$1$ $2$", [
+                    today.day,
+                    monthName(today.month)
                 ]);
                 break;
-            case 8: // WEEKDAY, MM/DD/YYYY
-                value = Lang.format("$1$, $2$/$3$/$4$", [
-                    dayName(today.day_of_week),
-                    today.month.format("%02d"),
-                    today.day.format("%02d"),
-                    today.year
+            case 6: // 14 MAR (Week number)
+                value = Lang.format("$1$ $2$ (W$3$)", [
+                    today.day,
+                    monthName(today.month),
+                    isoWeekNumber(today.year, today.month, today.day)
                 ]);
                 break;
-            case 9: // WEEKDAY, DD.MM.YYYY
-                value = Lang.format("$1$, $2$.$3$.$4$", [
+            case 7: // THU 14 (Week number)
+                value = Lang.format("$1$ $2$ (W$3$)", [
                     dayName(today.day_of_week),
-                    today.day.format("%02d"),
-                    today.month.format("%02d"),
-                    today.year
+                    today.day,
+                    isoWeekNumber(today.year, today.month, today.day)
                 ]);
                 break;
         }
-
         return value;
     }
 
