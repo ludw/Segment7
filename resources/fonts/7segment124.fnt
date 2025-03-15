@@ -14,4 +14,4 @@ char id=55 x=504 y=72 width=72 height=124 xoffset=4 yoffset=0 xadvance=80 page=0
 char id=56 x=576 y=72 width=72 height=124 xoffset=4 yoffset=0 xadvance=80 page=0
 char id=57 x=648 y=72 width=72 height=124 xoffset=4 yoffset=0 xadvance=80 page=0
 char id=48 x=720 y=72 width=72 height=124 xoffset=4 yoffset=0 xadvance=80 page=0
-char id=58 x=792 y=72 width=52 height=124 xoffset=4 yoffset=0 xadvance=60 page=0
+char id=58 x=792 y=72 width=52 height=124 xoffset=0 yoffset=0 xadvance=52 page=0

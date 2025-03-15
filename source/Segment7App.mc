@@ -4,6 +4,8 @@ import Toybox.WatchUi;
 
 class Segment7App extends Application.AppBase {
 
+    var view;
+
     function initialize() {
         AppBase.initialize();
     }
@@ -18,11 +20,13 @@ class Segment7App extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new Segment7View() ];
+        view = new Segment7View();
+        return [ view ];
     }
 
     // New app settings have been received so trigger a UI update
     function onSettingsChanged() as Void {
+        view.onSettingsChanged();
         WatchUi.requestUpdate();
     }
 
