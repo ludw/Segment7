@@ -31,7 +31,14 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propFieldTopRight as Number = 0;
     hidden var propFieldBottomLeft as Number = 0;
     hidden var propFieldBottomRight as Number = 0;
+
+    hidden var propShowClockBg as Boolean = true;
+    hidden var propHourFormat as Number = 0;
     hidden var propDateFormat as Number = 0;
+    hidden var propShowUnits as Boolean = true;
+    hidden var propUnits as Number = 0;
+    hidden var propWindUnit as Number = 0;
+    hidden var propPressureUnit as Number = 0;
 
     function initialize() {
         WatchFace.initialize();
@@ -132,7 +139,9 @@ class Segment7View extends WatchUi.WatchFace {
         dc.clear();
 
         // Draw Clock
-        dc.drawText(center_x, center_y, fontClock, "##:##", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        if(propShowClockBg) {
+            dc.drawText(center_x, center_y, fontClock, "##:##", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        }
         dc.setColor(0xFFFFFF, Graphics.COLOR_TRANSPARENT);
         dc.drawText(center_x, center_y, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
@@ -149,7 +158,13 @@ class Segment7View extends WatchUi.WatchFace {
         propFieldTopRight = Application.Properties.getValue("fieldTopRight") as Number;
         propFieldBottomLeft = Application.Properties.getValue("fieldBottomLeft") as Number;
         propFieldBottomRight = Application.Properties.getValue("fieldBottomRight") as Number;
+        propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
+        propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;
+        propShowUnits = Application.Properties.getValue("showUnits") as Boolean;
+        propUnits = Application.Properties.getValue("units") as Number;
+        propWindUnit = Application.Properties.getValue("windUnit") as Number;
+        propPressureUnit = Application.Properties.getValue("pressureUnit") as Number;
     }
 
     hidden function updateData() as Void {
@@ -176,7 +191,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function getValueByType(complicationType as Number) as String {
         var val = "";
-        var numberFormat = "%02d";
+        var numberFormat = "%d";
 
         if(complicationType == 1) { // Date
             val = formatDate();
@@ -192,85 +207,55 @@ class Segment7View extends WatchUi.WatchFace {
                     val = ActivityMonitor.getInfo().activeMinutesDay.total.format(numberFormat);
                 }
             }
-        } else if(complicationType == 4) { // distance (km) / day
+        } else if(complicationType == 4) { // distance / day
             if(ActivityMonitor.getInfo() has :distance) {
                 if(ActivityMonitor.getInfo().distance != null) {
-                    var distance_km = ActivityMonitor.getInfo().distance / 100000.0;
-                    val = formatDistance(distance_km);
+                    var distance = ActivityMonitor.getInfo().distance;
+                    val = valueAndUnit(formatDistance(distance), complicationType);
                 }
             }
-        } else if(complicationType == 5) { // distance (miles) / day
-            if(ActivityMonitor.getInfo() has :distance) {
-                if(ActivityMonitor.getInfo().distance != null) {
-                    var distance_miles = ActivityMonitor.getInfo().distance / 160900.0;
-                    val = formatDistance(distance_miles);
-                }
-            }
-        } else if(complicationType == 6) { // Weekly distance (km)
-            var weekly_distance = getWeeklyDistance() / 100000.0;
+        } else if(complicationType == 5) { // Weekly distance
+            var weekly_distance = getWeeklyDistance();
             val = formatDistance(weekly_distance);
-        } else if(complicationType == 7) { // Weekly distance (miles)
-            var weekly_distance = getWeeklyDistance() * 0.00000621371;
-            val = formatDistance(weekly_distance);
-        } else if(complicationType == 8) { // Weekly run distance (km)
+        } else if(complicationType == 6) { // Weekly run distance
             if (Toybox has :Complications) {
                 try {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_WEEKLY_RUN_DISTANCE));
                     if (complication != null && complication.value != null) {
-                        var distanceKm = complication.value / 1000.0;  // Convert meters to km
-                        val = formatDistance(distanceKm);
+                        var distance = complication.value;
+                        val = valueAndUnit(formatDistance(distance), complicationType);
                     }
                 } catch(e) {}
             }
-        } else if(complicationType == 9) { // Weekly run distance (miles)
-            if (Toybox has :Complications) {
-                try {
-                    var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_WEEKLY_RUN_DISTANCE));
-                    if (complication != null && complication.value != null) {
-                        var distanceMiles = complication.value * 0.000621371;  // Convert meters to miles
-                        val = formatDistance(distanceMiles);
-                    }
-                } catch(e) {}
-            }
-        } else if(complicationType == 10) { // Weekly bike distance (km)
+        } else if(complicationType == 7) { // Weekly bike distance
             if (Toybox has :Complications) {
                 try {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_WEEKLY_BIKE_DISTANCE));
                     if (complication != null && complication.value != null) {
-                        var distanceKm = complication.value / 1000.0;  // Convert meters to km
-                        val = formatDistance(distanceKm);
+                        var distance = complication.value;
+                        val = valueAndUnit(formatDistance(distance), complicationType);
                     }
                 } catch(e) {}
             }
-        } else if(complicationType == 11) { // Weekly bike distance (miles)
-            if (Toybox has :Complications) {
-                try {
-                    var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_WEEKLY_BIKE_DISTANCE));
-                    if (complication != null && complication.value != null) {
-                        var distanceMiles = complication.value * 0.000621371;  // Convert meters to miles
-                        val = formatDistance(distanceMiles);
-                    }
-                } catch(e) {}
-            }
-        } else if(complicationType == 12) { // floors climbed / day
+        } else if(complicationType == 8) { // floors climbed / day
             if(ActivityMonitor.getInfo() has :floorsClimbed) {
                 if(ActivityMonitor.getInfo().floorsClimbed != null) {
                     val = ActivityMonitor.getInfo().floorsClimbed.format(numberFormat);
                 }
             }
-        } else if(complicationType == 13) { // meters climbed / day
+        } else if(complicationType == 9) { // meters climbed / day
             if(ActivityMonitor.getInfo() has :metersClimbed) {
                 if(ActivityMonitor.getInfo().metersClimbed != null) {
                     val = ActivityMonitor.getInfo().metersClimbed.format(numberFormat);
                 }
             }
-        } else if(complicationType == 14) { // Time to Recovery (h)
+        } else if(complicationType == 10) { // Time to Recovery (h)
             if(ActivityMonitor.getInfo() has :timeToRecovery) {
                 if(ActivityMonitor.getInfo().timeToRecovery != null) {
                     val = ActivityMonitor.getInfo().timeToRecovery.format(numberFormat);
                 }
             }
-        } else if(complicationType == 15) { // HR
+        } else if(complicationType == 11) { // HR
             // Try to retrieve live HR from Activity::Info
             var activity_info = Activity.getActivityInfo();
             var sample = activity_info.currentHeartRate;
@@ -283,23 +268,7 @@ class Segment7View extends WatchUi.WatchFace {
                     val = hist.heartRate.format("%01d");
                 }
             }
-        } else if(complicationType == 16) { // Altitude (m)
-            if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
-                var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
-                var elv = elv_iterator.next();
-                if(elv != null and elv.data != null) {
-                    val = elv.data.format(numberFormat);
-                }
-            }
-        } else if(complicationType == 17) { // Altitude (ft)
-            if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
-                var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
-                var elv = elv_iterator.next();
-                if(elv != null and elv.data != null) {
-                    val = (elv.data * 3.28084).format(numberFormat);
-                }
-            }
-        } else if(complicationType == 18) { // Stress
+        } else if(complicationType == 12) { // Stress
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getStressHistory)) {
                 var st_iterator = Toybox.SensorHistory.getStressHistory({:period => 1});
                 var st = st_iterator.next();
@@ -307,7 +276,7 @@ class Segment7View extends WatchUi.WatchFace {
                     val = st.data.format(numberFormat);
                 }
             }
-        } else if(complicationType == 19) { // Body battery
+        } else if(complicationType == 13) { // Body battery
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getBodyBatteryHistory)) {
                 var bb_iterator = Toybox.SensorHistory.getBodyBatteryHistory({:period => 1});
                 var bb = bb_iterator.next();
@@ -315,101 +284,136 @@ class Segment7View extends WatchUi.WatchFace {
                     val = bb.data.format(numberFormat);
                 }
             }
-        } else if(complicationType == 20) { // Steps / day
+        } else if(complicationType == 14) { // Steps / day
             if(ActivityMonitor.getInfo().steps != null) {
                 val = ActivityMonitor.getInfo().steps.format(numberFormat);
             }
-        } else if(complicationType == 21) { // Distance (m) / day
-            if(ActivityMonitor.getInfo().distance != null) {
-                val = (ActivityMonitor.getInfo().distance / 100).format(numberFormat);
-            }
-        } else if(complicationType == 22) { // Wheelchair pushes
+        } else if(complicationType == 15) { // Wheelchair pushes
             if(ActivityMonitor.getInfo() has :pushes) {
                 if(ActivityMonitor.getInfo().pushes != null) {
                     val = ActivityMonitor.getInfo().pushes.format(numberFormat);
                 }
             }
-        } else if(complicationType == 23) { // Sea level pressure (hPA)
+        } else if(complicationType == 16) { // Altitude (m)
+            if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
+                var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
+                var elv = elv_iterator.next();
+                if(elv != null and elv.data != null) {
+                    val = valueAndUnit(elv.data.format(numberFormat), complicationType);
+                }
+            }
+        } else if(complicationType == 17) { // Altitude (ft)
+            if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
+                var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
+                var elv = elv_iterator.next();
+                if(elv != null and elv.data != null) {
+                    val = valueAndUnit((elv.data * 3.28084).format(numberFormat), complicationType);
+                }
+            }
+        } else if(complicationType == 18) { // Sea level pressure
             var info = Activity.getActivityInfo();
             if (info has :meanSeaLevelPressure && info.meanSeaLevelPressure != null) {
                 val = formatPressure(info.meanSeaLevelPressure / 100.0, numberFormat);
             }
-        } else if(complicationType == 24) { // Raw Barometric pressure (hPA)
+        } else if(complicationType == 19) { // Raw Barometric pressure
             var info = Activity.getActivityInfo();
             if (info has :rawAmbientPressure && info.rawAmbientPressure != null) {
                 val = formatPressure(info.rawAmbientPressure / 100.0, numberFormat);
             }
-        } else if(complicationType == 25) { // Weight kg
+        } else if(complicationType == 20) { // Weight
             var profile = UserProfile.getProfile();
             if(profile has :weight) {
                 if(profile.weight != null) {
-                    var weight_kg = (profile.weight as Float) / 1000.0;
-                    val = weight_kg.format("%.1f");
+                    val = valueAndUnit(formatWeight(profile.weight), complicationType);
                 }
             }
-        } else if(complicationType == 26) { // Weight lbs
-            var profile = UserProfile.getProfile();
-            if(profile has :weight) {
-                if(profile.weight != null) {
-                    val = ((profile.weight as Float) * 0.00220462).format(numberFormat);
-                }
-            }
-        } else if(complicationType == 27) { // Calories
+        } else if(complicationType == 21) { // Calories
             if (ActivityMonitor.getInfo() has :calories) {
                 if(ActivityMonitor.getInfo().calories != null) {
-                    val = ActivityMonitor.getInfo().calories.format(numberFormat);
+                    val = valueAndUnit(ActivityMonitor.getInfo().calories.format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 28) { // Act Calories
+        } else if(complicationType == 22) { // Act Calories
             var rest_calories = getRestCalories();
             // Get total calories and subtract rest calories
             if (ActivityMonitor.getInfo() has :calories && ActivityMonitor.getInfo().calories != null && rest_calories > 0) {
                 var active_calories = ActivityMonitor.getInfo().calories - rest_calories;
                 if (active_calories > 0) {
-                    val = active_calories.format(numberFormat);
+                    val = valueAndUnit(active_calories.format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 29) { // Week number
+        } else if(complicationType == 23) { // Week number
             var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
             var week_number = isoWeekNumber(today.year, today.month, today.day);
             val = week_number.format(numberFormat);
-        } else if(complicationType == 30) { // Battery percentage
+        } else if(complicationType == 24) { // Battery percentage
             var battery = System.getSystemStats().battery;
             val = Lang.format("$1$", [battery.format("%d")]);
-        } else if(complicationType == 31) { // Battery days remaining
+        } else if(complicationType == 25) { // Battery days remaining
             if(System.getSystemStats() has :batteryInDays) {
                 if (System.getSystemStats().batteryInDays != null){
                     var sample = Math.round(System.getSystemStats().batteryInDays);
                     val = Lang.format("$1$", [sample.format(numberFormat)]);
                 }
             }
-        } else if(complicationType == 32) { // Notification count
+        } else if(complicationType == 26) { // Notification count
             var notif_count = System.getDeviceSettings().notificationCount;
             if(notif_count != null) {
                 val = notif_count.format(numberFormat);
             }
-        } else if(complicationType == 33) { // Solar intensity
+        } else if(complicationType == 27) { // Solar intensity
             if (Toybox has :Complications) {
                 try {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_SOLAR_INPUT));
                     if (complication != null && complication.value != null) {
                         val = complication.value.format(numberFormat);
                     }
-                } catch(e) {
-                    // Complication not found
-                }
+                } catch(e) {}
             }
-        } else if(complicationType == 34) { // High/low temp
+        } else if(complicationType == 28) { // High/low temp
             val = getHighLow();
-        } else if(complicationType == 35) { // Temperature
+        } else if(complicationType == 29) { // Temperature
             val = getTemperature();
-        } else if(complicationType == 36) { // Precipitation chance
+        } else if(complicationType == 30) { // Precipitation chance
             val = getPrecip();
-        } else if(complicationType == 37) { // Millitary Date Time Group
+        } else if(complicationType == 31) { // Wind
+            val = getWind();
+        } else if(complicationType == 32) { // Millitary Date Time Group
             val = getDateTimeGroup();
         }
 
         return val;
+    }
+
+    hidden function valueAndUnit(value as String, complicationType as Number) as String {
+        if(propShowUnits) {
+            return Lang.format("$1$ $2$", [value, getUnit(complicationType)]);
+        }
+        return value;
+    }
+
+    hidden function getUnit(complicationType as Number) as String {
+        var unit = "";
+        if(complicationType == 21 or complicationType == 22) {
+            unit = "KCAL";
+        } else if(complicationType == 4 or complicationType == 5 or complicationType == 6 or complicationType == 7) {
+            if(propUnits == 1 or (propUnits == 0 and System.getDeviceSettings().distanceUnits == System.UNIT_METRIC) ) {
+                unit = "KM";
+            } else {
+                unit = "MI";
+            }
+        } else if(complicationType == 16) {
+            unit = "M";
+        } else if(complicationType == 17) {
+            unit = "FT";
+        } else if(complicationType == 20) {
+            if(propUnits == 1 or (propUnits == 0 and System.getDeviceSettings().weightUnits == System.UNIT_METRIC) ) {
+                unit = "KG";
+            } else {
+                unit = "LBS";
+            }
+        }
+        return unit;
     }
 
     hidden function formatDate() as String {
@@ -494,7 +498,6 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function formatPressure(pressureHpa as Float, numberFormat as String) as String {
         var val = "";
-        var propPressureUnit = 0;
 
         if (propPressureUnit == 0) { // hPA
             val = pressureHpa.format(numberFormat);
@@ -507,8 +510,26 @@ class Segment7View extends WatchUi.WatchFace {
         return val;
     }
 
-    hidden function formatDistance(distance as Float) as String {
+    hidden function formatDistance(meters as Number) as String {
+        var distance_units = System.getDeviceSettings().distanceUnits;
+        var distance;
+        if((propUnits == 0 and distance_units == System.UNIT_METRIC) or propUnits == 1) {
+            distance = meters / 100000.0;
+        } else {
+            distance = meters / 160900.0;
+        }
         return distance < 10 ? distance.format("%.1f") : distance.format("%d");
+    }
+
+    hidden function formatWeight(grams as Number) as String {
+        var weight_units = System.getDeviceSettings().weightUnits;
+        var weight;
+        if(propUnits == 0 and weight_units == System.UNIT_METRIC or propUnits == 1) {
+            weight = grams / 1000.0;
+        } else {
+            weight = grams * 0.00220462;
+        }
+        return weight < 100 ? weight.format("%.1f") : weight.format("%d");
     }
 
     hidden function getTemperature() as String {
@@ -541,7 +562,6 @@ class Segment7View extends WatchUi.WatchFace {
     hidden function getWind() as String {
         var windspeed = "";
         var bearing = "";
-        var propWindUnit = 0;
 
         if(weatherCondition != null and weatherCondition.windSpeed != null) {
             var windspeed_mps = weatherCondition.windSpeed;

@@ -1,188 +1,216 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
 
-    <setting propertyKey="@Properties.fieldTopLeft" title="Top Left field:">
-        <settingConfig type="list">
-            <listEntry value="-2">Hidden</listEntry>
-            <listEntry value="1">Date</listEntry>
-            <listEntry value="2">Active min / week</listEntry>
-            <listEntry value="3">Active min / day</listEntry>
-            <listEntry value="4">Distance (km) / day</listEntry>
-            <listEntry value="5">Distance (miles) / day</listEntry>
-            <listEntry value="6">Total distance past 7 days (km)</listEntry>
-            <listEntry value="7">Total distance past 7 days (miles)</listEntry>
-            <listEntry value="8">Run distance (km) / week *</listEntry>
-            <listEntry value="9">Run distance (miles) / week *</listEntry>
-            <listEntry value="10">Bike distance (km) / week *</listEntry>
-            <listEntry value="11">Bike distance (miles) / week *</listEntry>
-            <listEntry value="12">Floors climbed / day</listEntry>
-            <listEntry value="13">Meters climbed / day</listEntry>
-            <listEntry value="14">Time to Recovery (h) *</listEntry>
-            <listEntry value="15">Heart Rate</listEntry>
-            <listEntry value="16">Altitude (m)</listEntry>
-            <listEntry value="17">Altitude (ft)</listEntry>
-            <listEntry value="18">Stress score</listEntry>
-            <listEntry value="19">Body battery</listEntry>
-            <listEntry value="20">Steps / day</listEntry>
-            <listEntry value="21">Distance (m) / day</listEntry>
-            <listEntry value="22">Wheelchair pushes / day</listEntry>
-            <listEntry value="23">Barometric Pressure, sea level</listEntry>
-            <listEntry value="24">Barometric Pressure, raw</listEntry>
-            <listEntry value="25">Weight (kg)</listEntry>
-            <listEntry value="26">Weight (lbs)</listEntry>
-            <listEntry value="27">Calories (kcal) / day</listEntry>
-            <listEntry value="28">Active calories (kcal) / day</listEntry>
-            <listEntry value="29">Week number</listEntry>
-            <listEntry value="30">Battery percentage</listEntry>
-            <listEntry value="31">Battery days remaining *</listEntry>
-            <listEntry value="32">Notification count</listEntry>
-            <listEntry value="33">Solar intensity</listEntry>
-            <listEntry value="34">Weather: high / low temperature</listEntry>
-            <listEntry value="35">Weather: Temperature</listEntry>
-            <listEntry value="36">Weather: Chance of Precipitation</listEntry>
-            <listEntry value="37">Millitary Date Time Group</listEntry>
-        </settingConfig>
-    </setting>
+    <group id="groupData" title="What data to display">
+        <setting propertyKey="@Properties.fieldTopLeft" title="Top Left field:">
+            <settingConfig type="list">
+                <listEntry value="-2">Hidden</listEntry>
+                <listEntry value="1">Date</listEntry>
+                <listEntry value="2">Active min / week</listEntry>
+                <listEntry value="3">Active min / day</listEntry>
+                <listEntry value="4">Distance / day</listEntry>
+                <listEntry value="5">Total distance past 7 days</listEntry>
+                <listEntry value="6">Run distance / week *</listEntry>
+                <listEntry value="7">Bike distance / week *</listEntry>
+                <listEntry value="8">Floors climbed / day</listEntry>
+                <listEntry value="9">Meters climbed / day</listEntry>
+                <listEntry value="10">Time to Recovery (h) *</listEntry>
+                <listEntry value="11">Heart Rate</listEntry>
+                <listEntry value="12">Stress score</listEntry>
+                <listEntry value="13">Body battery</listEntry>
+                <listEntry value="14">Steps / day</listEntry>
+                <listEntry value="15">Wheelchair pushes / day</listEntry>
+                <listEntry value="16">Altitude (m)</listEntry>
+                <listEntry value="17">Altitude (ft)</listEntry>
+                <listEntry value="18">Barometric Pressure, sea level</listEntry>
+                <listEntry value="19">Barometric Pressure, raw</listEntry>
+                <listEntry value="20">Weight</listEntry>
+                <listEntry value="21">Calories (kcal) / day</listEntry>
+                <listEntry value="22">Active calories (kcal) / day</listEntry>
+                <listEntry value="23">Week number</listEntry>
+                <listEntry value="24">Battery percentage</listEntry>
+                <listEntry value="25">Battery days remaining *</listEntry>
+                <listEntry value="26">Notification count</listEntry>
+                <listEntry value="27">Solar intensity</listEntry>
+                <listEntry value="28">Weather: high / low temperature</listEntry>
+                <listEntry value="29">Weather: Temperature</listEntry>
+                <listEntry value="30">Weather: Chance of Precipitation</listEntry>
+                <listEntry value="31">Weather: Wind</listEntry>
+                <listEntry value="32">Millitary Date Time Group</listEntry>
+            </settingConfig>
+        </setting>
 
-    <setting propertyKey="@Properties.fieldTopRight" title="Top Right field:">
-        <settingConfig type="list">
-            <listEntry value="-2">Hidden</listEntry>
-            <listEntry value="1">Date</listEntry>
-            <listEntry value="2">Active min / week</listEntry>
-            <listEntry value="3">Active min / day</listEntry>
-            <listEntry value="4">Distance (km) / day</listEntry>
-            <listEntry value="5">Distance (miles) / day</listEntry>
-            <listEntry value="6">Total distance past 7 days (km)</listEntry>
-            <listEntry value="7">Total distance past 7 days (miles)</listEntry>
-            <listEntry value="8">Run distance (km) / week *</listEntry>
-            <listEntry value="9">Run distance (miles) / week *</listEntry>
-            <listEntry value="10">Bike distance (km) / week *</listEntry>
-            <listEntry value="11">Bike distance (miles) / week *</listEntry>
-            <listEntry value="12">Floors climbed / day</listEntry>
-            <listEntry value="13">Meters climbed / day</listEntry>
-            <listEntry value="14">Time to Recovery (h) *</listEntry>
-            <listEntry value="15">Heart Rate</listEntry>
-            <listEntry value="16">Altitude (m)</listEntry>
-            <listEntry value="17">Altitude (ft)</listEntry>
-            <listEntry value="18">Stress score</listEntry>
-            <listEntry value="19">Body battery</listEntry>
-            <listEntry value="20">Steps / day</listEntry>
-            <listEntry value="21">Distance (m) / day</listEntry>
-            <listEntry value="22">Wheelchair pushes / day</listEntry>
-            <listEntry value="23">Barometric Pressure, sea level</listEntry>
-            <listEntry value="24">Barometric Pressure, raw</listEntry>
-            <listEntry value="25">Weight (kg)</listEntry>
-            <listEntry value="26">Weight (lbs)</listEntry>
-            <listEntry value="27">Calories (kcal) / day</listEntry>
-            <listEntry value="28">Active calories (kcal) / day</listEntry>
-            <listEntry value="29">Week number</listEntry>
-            <listEntry value="30">Battery percentage</listEntry>
-            <listEntry value="31">Battery days remaining *</listEntry>
-            <listEntry value="32">Notification count</listEntry>
-            <listEntry value="33">Solar intensity</listEntry>
-            <listEntry value="34">Weather: high / low temperature</listEntry>
-            <listEntry value="35">Weather: Temperature</listEntry>
-            <listEntry value="36">Weather: Chance of Precipitation</listEntry>
-            <listEntry value="37">Millitary Date Time Group</listEntry>
-        </settingConfig>
-    </setting>
+        <setting propertyKey="@Properties.fieldTopRight" title="Top Right field:">
+            <settingConfig type="list">
+                <listEntry value="-2">Hidden</listEntry>
+                <listEntry value="1">Date</listEntry>
+                <listEntry value="2">Active min / week</listEntry>
+                <listEntry value="3">Active min / day</listEntry>
+                <listEntry value="4">Distance / day</listEntry>
+                <listEntry value="5">Total distance past 7 days</listEntry>
+                <listEntry value="6">Run distance / week *</listEntry>
+                <listEntry value="7">Bike distance / week *</listEntry>
+                <listEntry value="8">Floors climbed / day</listEntry>
+                <listEntry value="9">Meters climbed / day</listEntry>
+                <listEntry value="10">Time to Recovery (h) *</listEntry>
+                <listEntry value="11">Heart Rate</listEntry>
+                <listEntry value="12">Stress score</listEntry>
+                <listEntry value="13">Body battery</listEntry>
+                <listEntry value="14">Steps / day</listEntry>
+                <listEntry value="15">Wheelchair pushes / day</listEntry>
+                <listEntry value="16">Altitude (m)</listEntry>
+                <listEntry value="17">Altitude (ft)</listEntry>
+                <listEntry value="18">Barometric Pressure, sea level</listEntry>
+                <listEntry value="19">Barometric Pressure, raw</listEntry>
+                <listEntry value="20">Weight</listEntry>
+                <listEntry value="21">Calories (kcal) / day</listEntry>
+                <listEntry value="22">Active calories (kcal) / day</listEntry>
+                <listEntry value="23">Week number</listEntry>
+                <listEntry value="24">Battery percentage</listEntry>
+                <listEntry value="25">Battery days remaining *</listEntry>
+                <listEntry value="26">Notification count</listEntry>
+                <listEntry value="27">Solar intensity</listEntry>
+                <listEntry value="28">Weather: high / low temperature</listEntry>
+                <listEntry value="29">Weather: Temperature</listEntry>
+                <listEntry value="30">Weather: Chance of Precipitation</listEntry>
+                <listEntry value="31">Weather: Wind</listEntry>
+                <listEntry value="32">Millitary Date Time Group</listEntry>
+            </settingConfig>
+        </setting>
 
-    <setting propertyKey="@Properties.fieldBottomLeft" title="Bottom Left field:">
-        <settingConfig type="list">
-            <listEntry value="-2">Hidden</listEntry>
-            <listEntry value="1">Date</listEntry>
-            <listEntry value="2">Active min / week</listEntry>
-            <listEntry value="3">Active min / day</listEntry>
-            <listEntry value="4">Distance (km) / day</listEntry>
-            <listEntry value="5">Distance (miles) / day</listEntry>
-            <listEntry value="6">Total distance past 7 days (km)</listEntry>
-            <listEntry value="7">Total distance past 7 days (miles)</listEntry>
-            <listEntry value="8">Run distance (km) / week *</listEntry>
-            <listEntry value="9">Run distance (miles) / week *</listEntry>
-            <listEntry value="10">Bike distance (km) / week *</listEntry>
-            <listEntry value="11">Bike distance (miles) / week *</listEntry>
-            <listEntry value="12">Floors climbed / day</listEntry>
-            <listEntry value="13">Meters climbed / day</listEntry>
-            <listEntry value="14">Time to Recovery (h) *</listEntry>
-            <listEntry value="15">Heart Rate</listEntry>
-            <listEntry value="16">Altitude (m)</listEntry>
-            <listEntry value="17">Altitude (ft)</listEntry>
-            <listEntry value="18">Stress score</listEntry>
-            <listEntry value="19">Body battery</listEntry>
-            <listEntry value="20">Steps / day</listEntry>
-            <listEntry value="21">Distance (m) / day</listEntry>
-            <listEntry value="22">Wheelchair pushes / day</listEntry>
-            <listEntry value="23">Barometric Pressure, sea level</listEntry>
-            <listEntry value="24">Barometric Pressure, raw</listEntry>
-            <listEntry value="25">Weight (kg)</listEntry>
-            <listEntry value="26">Weight (lbs)</listEntry>
-            <listEntry value="27">Calories (kcal) / day</listEntry>
-            <listEntry value="28">Active calories (kcal) / day</listEntry>
-            <listEntry value="29">Week number</listEntry>
-            <listEntry value="30">Battery percentage</listEntry>
-            <listEntry value="31">Battery days remaining *</listEntry>
-            <listEntry value="32">Notification count</listEntry>
-            <listEntry value="33">Solar intensity</listEntry>
-            <listEntry value="34">Weather: high / low temperature</listEntry>
-            <listEntry value="35">Weather: Temperature</listEntry>
-            <listEntry value="36">Weather: Chance of Precipitation</listEntry>
-            <listEntry value="37">Millitary Date Time Group</listEntry>
-        </settingConfig>
-    </setting>
+        <setting propertyKey="@Properties.fieldBottomLeft" title="Bottom Left field:">
+            <settingConfig type="list">
+                <listEntry value="-2">Hidden</listEntry>
+                <listEntry value="1">Date</listEntry>
+                <listEntry value="2">Active min / week</listEntry>
+                <listEntry value="3">Active min / day</listEntry>
+                <listEntry value="4">Distance / day</listEntry>
+                <listEntry value="5">Total distance past 7 days</listEntry>
+                <listEntry value="6">Run distance / week *</listEntry>
+                <listEntry value="7">Bike distance / week *</listEntry>
+                <listEntry value="8">Floors climbed / day</listEntry>
+                <listEntry value="9">Meters climbed / day</listEntry>
+                <listEntry value="10">Time to Recovery (h) *</listEntry>
+                <listEntry value="11">Heart Rate</listEntry>
+                <listEntry value="12">Stress score</listEntry>
+                <listEntry value="13">Body battery</listEntry>
+                <listEntry value="14">Steps / day</listEntry>
+                <listEntry value="15">Wheelchair pushes / day</listEntry>
+                <listEntry value="16">Altitude (m)</listEntry>
+                <listEntry value="17">Altitude (ft)</listEntry>
+                <listEntry value="18">Barometric Pressure, sea level</listEntry>
+                <listEntry value="19">Barometric Pressure, raw</listEntry>
+                <listEntry value="20">Weight</listEntry>
+                <listEntry value="21">Calories (kcal) / day</listEntry>
+                <listEntry value="22">Active calories (kcal) / day</listEntry>
+                <listEntry value="23">Week number</listEntry>
+                <listEntry value="24">Battery percentage</listEntry>
+                <listEntry value="25">Battery days remaining *</listEntry>
+                <listEntry value="26">Notification count</listEntry>
+                <listEntry value="27">Solar intensity</listEntry>
+                <listEntry value="28">Weather: high / low temperature</listEntry>
+                <listEntry value="29">Weather: Temperature</listEntry>
+                <listEntry value="30">Weather: Chance of Precipitation</listEntry>
+                <listEntry value="31">Weather: Wind</listEntry>
+                <listEntry value="32">Millitary Date Time Group</listEntry>
+            </settingConfig>
+        </setting>
 
-    <setting propertyKey="@Properties.fieldBottomRight" title="Bottom Right field:">
-        <settingConfig type="list">
-            <listEntry value="-2">Hidden</listEntry>
-            <listEntry value="1">Date</listEntry>
-            <listEntry value="2">Active min / week</listEntry>
-            <listEntry value="3">Active min / day</listEntry>
-            <listEntry value="4">Distance (km) / day</listEntry>
-            <listEntry value="5">Distance (miles) / day</listEntry>
-            <listEntry value="6">Total distance past 7 days (km)</listEntry>
-            <listEntry value="7">Total distance past 7 days (miles)</listEntry>
-            <listEntry value="8">Run distance (km) / week *</listEntry>
-            <listEntry value="9">Run distance (miles) / week *</listEntry>
-            <listEntry value="10">Bike distance (km) / week *</listEntry>
-            <listEntry value="11">Bike distance (miles) / week *</listEntry>
-            <listEntry value="12">Floors climbed / day</listEntry>
-            <listEntry value="13">Meters climbed / day</listEntry>
-            <listEntry value="14">Time to Recovery (h) *</listEntry>
-            <listEntry value="15">Heart Rate</listEntry>
-            <listEntry value="16">Altitude (m)</listEntry>
-            <listEntry value="17">Altitude (ft)</listEntry>
-            <listEntry value="18">Stress score</listEntry>
-            <listEntry value="19">Body battery</listEntry>
-            <listEntry value="20">Steps / day</listEntry>
-            <listEntry value="21">Distance (m) / day</listEntry>
-            <listEntry value="22">Wheelchair pushes / day</listEntry>
-            <listEntry value="23">Barometric Pressure, sea level</listEntry>
-            <listEntry value="24">Barometric Pressure, raw</listEntry>
-            <listEntry value="25">Weight (kg)</listEntry>
-            <listEntry value="26">Weight (lbs)</listEntry>
-            <listEntry value="27">Calories (kcal) / day</listEntry>
-            <listEntry value="28">Active calories (kcal) / day</listEntry>
-            <listEntry value="29">Week number</listEntry>
-            <listEntry value="30">Battery percentage</listEntry>
-            <listEntry value="31">Battery days remaining *</listEntry>
-            <listEntry value="32">Notification count</listEntry>
-            <listEntry value="33">Solar intensity</listEntry>
-            <listEntry value="34">Weather: high / low temperature</listEntry>
-            <listEntry value="35">Weather: Temperature</listEntry>
-            <listEntry value="36">Weather: Chance of Precipitation</listEntry>
-            <listEntry value="37">Millitary Date Time Group</listEntry>
-        </settingConfig>
-    </setting>
+        <setting propertyKey="@Properties.fieldBottomRight" title="Bottom Right field:">
+            <settingConfig type="list">
+                <listEntry value="-2">Hidden</listEntry>
+                <listEntry value="1">Date</listEntry>
+                <listEntry value="2">Active min / week</listEntry>
+                <listEntry value="3">Active min / day</listEntry>
+                <listEntry value="4">Distance / day</listEntry>
+                <listEntry value="5">Total distance past 7 days</listEntry>
+                <listEntry value="6">Run distance / week *</listEntry>
+                <listEntry value="7">Bike distance / week *</listEntry>
+                <listEntry value="8">Floors climbed / day</listEntry>
+                <listEntry value="9">Meters climbed / day</listEntry>
+                <listEntry value="10">Time to Recovery (h) *</listEntry>
+                <listEntry value="11">Heart Rate</listEntry>
+                <listEntry value="12">Stress score</listEntry>
+                <listEntry value="13">Body battery</listEntry>
+                <listEntry value="14">Steps / day</listEntry>
+                <listEntry value="15">Wheelchair pushes / day</listEntry>
+                <listEntry value="16">Altitude (m)</listEntry>
+                <listEntry value="17">Altitude (ft)</listEntry>
+                <listEntry value="18">Barometric Pressure, sea level</listEntry>
+                <listEntry value="19">Barometric Pressure, raw</listEntry>
+                <listEntry value="20">Weight</listEntry>
+                <listEntry value="21">Calories (kcal) / day</listEntry>
+                <listEntry value="22">Active calories (kcal) / day</listEntry>
+                <listEntry value="23">Week number</listEntry>
+                <listEntry value="24">Battery percentage</listEntry>
+                <listEntry value="25">Battery days remaining *</listEntry>
+                <listEntry value="26">Notification count</listEntry>
+                <listEntry value="27">Solar intensity</listEntry>
+                <listEntry value="28">Weather: high / low temperature</listEntry>
+                <listEntry value="29">Weather: Temperature</listEntry>
+                <listEntry value="30">Weather: Chance of Precipitation</listEntry>
+                <listEntry value="31">Weather: Wind</listEntry>
+                <listEntry value="32">Millitary Date Time Group</listEntry>
+            </settingConfig>
+        </setting>
+    </group>
 
-    <setting propertyKey="@Properties.dateFormat" title="Date format">
-        <settingConfig type="list">
-            <listEntry value="0">WEEKDAY DD</listEntry>
-            <listEntry value="1">YYYY-MM-DD</listEntry>
-            <listEntry value="2">MM/DD/YYYY</listEntry>
-            <listEntry value="3">DD.MM.YYYY</listEntry>
-            <listEntry value="4">WEEKDAY DD MONTH</listEntry>
-            <listEntry value="5">DD MONTH</listEntry>
-            <listEntry value="6">DD MONTH (Week)</listEntry>
-            <listEntry value="7">WEEKDAY DD (Week)</listEntry>
-        </settingConfig>
-    </setting>
+    <group id="groupAppearance" title="Appearance">
+        <setting propertyKey="@Properties.showClockBg" title="Show clock background">
+            <settingConfig type="boolean" />
+        </setting>
+    </group>    
+
+    <group id="groupUnits" title="Formats and units">
+        <setting propertyKey="@Properties.hourFormat" title="Time format (12/24h)">
+            <settingConfig type="list">
+                <listEntry value="0">Auto - Use system setting</listEntry>
+                <listEntry value="1">24h</listEntry>
+                <listEntry value="2">12h</listEntry>
+            </settingConfig>
+        </setting>
+
+        <setting propertyKey="@Properties.dateFormat" title="Date format">
+            <settingConfig type="list">
+                <listEntry value="0">WEEKDAY DD</listEntry>
+                <listEntry value="1">YYYY-MM-DD</listEntry>
+                <listEntry value="2">MM/DD/YYYY</listEntry>
+                <listEntry value="3">DD.MM.YYYY</listEntry>
+                <listEntry value="4">WEEKDAY DD MONTH</listEntry>
+                <listEntry value="5">DD MONTH</listEntry>
+                <listEntry value="6">DD MONTH (Week)</listEntry>
+                <listEntry value="7">WEEKDAY DD (Week)</listEntry>
+            </settingConfig>
+        </setting>
+
+        <setting propertyKey="@Properties.showUnits" title="Show units">
+            <settingConfig type="boolean" />
+        </setting>
+
+        <setting propertyKey="@Properties.units" title="Units">
+            <settingConfig type="list">
+                <listEntry value="0">Auto - Use system setting</listEntry>
+                <listEntry value="1">Metric (C, km, kg)</listEntry>
+                <listEntry value="2">Statute (F, mi, lbs)</listEntry>
+            </settingConfig>
+        </setting>
+
+        <setting propertyKey="@Properties.windUnit" title="Wind speed unit">
+            <settingConfig type="list">
+                <listEntry value="0">m/s</listEntry>
+                <listEntry value="1">km/h</listEntry>
+                <listEntry value="2">mph</listEntry>
+                <listEntry value="3">knots</listEntry>
+                <listEntry value="4">beufort</listEntry>
+            </settingConfig>
+        </setting>
+
+        <setting propertyKey="@Properties.pressureUnit" title="Pressure unit">
+            <settingConfig type="list">
+                <listEntry value="0">hPA</listEntry>
+                <listEntry value="1">mmHG</listEntry>
+                <listEntry value="2">inHG</listEntry>
+            </settingConfig>
+        </setting>
+    </group>
 
 </settings>
