@@ -6,4 +6,5 @@
   <font id="LedLines" filename="fonts/led_lines.fnt" antialias="true" />
   <font id="LedBig" filename="fonts/led_big.fnt" antialias="true" />
   <font id="LedSmall" filename="fonts/led_small.fnt" antialias="true" />
+  <font id="Patterns" filename="fonts/patterns.fnt" antialias="true" />
 </fonts>

@@ -1,5 +1,5 @@
 info face="LED" size=27 bold=0 italic=0 smooth=1 spacing=1,1
-common lineHeight=27 base=27 scaleW=260 scaleH=27 pages=1
+common lineHeight=29 base=27 scaleW=260 scaleH=27 pages=1
 page id=0 file="led_big.png"
 chars count=36
 

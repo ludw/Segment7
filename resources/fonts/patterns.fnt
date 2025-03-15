@@ -1,0 +1,7 @@
+info face="Patterns" size=48 bold=0 italic=0 smooth=1 spacing=1,1
+common lineHeight=48 base=48 scaleW=101 scaleH=48 pages=1
+page id=0 file="patterns.png"
+chars count=2
+
+char id=48 x=0 y=0 width=48 height=48 xoffset=0 yoffset=2 xadvance=48 page=0
+char id=49 x=51 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0

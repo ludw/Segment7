@@ -14,9 +14,11 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var clockHeight as Number;
     hidden var clockWidth as Number;
     hidden var dataHeight as Number;
+    hidden var textPadding as Number;
 
     hidden var fontClock as WatchUi.FontResource;
     hidden var fontData as WatchUi.FontResource;
+    hidden var fontPatterns as WatchUi.FontResource;
     
     hidden var dataTopLeft as String = "";
     hidden var dataTopRight as String = "";
@@ -51,26 +53,32 @@ class Segment7View extends WatchUi.WatchFace {
             fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
             clockHeight = 47;
             clockWidth = 153;
-            dataHeight = 13;
+            dataHeight = 15;
+            textPadding = 2;
         } else if(screenHeight >= 240 and screenHeight <= 280) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
             clockHeight = 72;
-            clockWidth = 207;
-            dataHeight = 20;
+            clockWidth = 205;
+            dataHeight = 22;
+            textPadding = 3;
         } else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
             clockHeight = 100;
             clockWidth = 300;
-            dataHeight = 20;
+            dataHeight = 22;
+            textPadding = 4;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
             clockHeight = 124;
             clockWidth = 364;
-            dataHeight = 27;
+            dataHeight = 29;
+            textPadding = 6;
         }
+
+        fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
 
         updateProperties();
         updateWeather();
@@ -132,13 +140,22 @@ class Segment7View extends WatchUi.WatchFace {
         var center_y = Math.round(screenHeight / 2);
         var half_clock_height = Math.round(clockHeight / 2);
         var half_clock_width = Math.round(clockWidth / 2);
-        var margin_y = Math.round(screenHeight / 20);
+        var margin_y = Math.round(screenHeight / 25);
 
         // Clear
         dc.setColor(0x333333, 0x000000);
         dc.clear();
 
+        // Background pattern
+        dc.setColor(0x555555, 0x000000);
+        var i = 0;
+        while(i < Math.ceil(screenHeight / 48) + 1) {
+            dc.drawText(0, i*48, fontPatterns, "0000000000", Graphics.TEXT_JUSTIFY_LEFT);
+            i++;
+        }
+
         // Draw Clock
+        dc.setColor(0x333333, Graphics.COLOR_TRANSPARENT);
         if(propShowClockBg) {
             dc.drawText(center_x, center_y, fontClock, "##:##", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
@@ -146,11 +163,34 @@ class Segment7View extends WatchUi.WatchFace {
         dc.drawText(center_x, center_y, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Draw Data fields
-        dc.drawText(center_x - half_clock_width, center_y - half_clock_height - margin_y - dataHeight, fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(center_x + half_clock_width, center_y - half_clock_height - margin_y - dataHeight, fontData, dataTopRight, Graphics.TEXT_JUSTIFY_RIGHT);
+        drawTextWithPadding(dc,
+                            center_x - half_clock_width + textPadding, center_y - half_clock_height - margin_y - dataHeight,
+                            fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT,
+                            0xFFFFFF);
+        drawTextWithPadding(dc,
+                            center_x + half_clock_width - textPadding, center_y - half_clock_height - margin_y - dataHeight,
+                            fontData, dataTopRight, Graphics.TEXT_JUSTIFY_RIGHT,
+                            0xFFFFFF);
+        drawTextWithPadding(dc,
+                            center_x - half_clock_width + textPadding, center_y + half_clock_height + margin_y,
+                            fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_LEFT,
+                            0xFFFFFF);
+        drawTextWithPadding(dc,
+                            center_x + half_clock_width - textPadding, center_y + half_clock_height + margin_y,
+                            fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_RIGHT,
+                             0xFFFFFF);
+    }
 
-        dc.drawText(center_x - half_clock_width, center_y + half_clock_height + margin_y , fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(center_x + half_clock_width, center_y + half_clock_height + margin_y , fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT);
+    hidden function drawTextWithPadding(dc as Dc, x as Number, y as Number, font as FontType, text as String, justify as TextJustification, color as ColorType) as Void {
+        var text_dim = dc.getTextDimensions(text, font) as [Lang.Number, Lang.Number];
+        dc.setColor(0x000000, 0x000000);
+        if(justify == Graphics.TEXT_JUSTIFY_LEFT) {
+            dc.fillRectangle(x - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
+        } else {
+            dc.fillRectangle(x - text_dim[0] - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
+        }
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x, y, font, text, justify);
     }
 
     hidden function updateProperties() as Void {
