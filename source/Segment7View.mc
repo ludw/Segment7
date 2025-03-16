@@ -223,12 +223,12 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawBatteryBar(dc as Dc) {
-        var text_dim = dc.getTextDimensions("||||||", fontData) as [Lang.Number, Lang.Number];
+        var text_dim = dc.getTextDimensions("}}}}}}", fontData) as [Lang.Number, Lang.Number];
         dc.setColor(0x000000, 0x000000);
         dc.fillRectangle(centerX - (text_dim[0] / 2) - textPadding, screenHeight - dataHeight - marginY, text_dim[0] + (textPadding * 2), text_dim[1]);
 
         dc.setColor(getColor(battBg), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX - (text_dim[0] / 2), screenHeight - dataHeight - marginY, fontData, "||||||", Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(centerX - (text_dim[0] / 2), screenHeight - dataHeight - marginY, fontData, "}}}}}}", Graphics.TEXT_JUSTIFY_LEFT);
         if(dataBattery.length() <= 1) {
             dc.setColor(getColor(battEmpty), Graphics.COLOR_TRANSPARENT);
         } else {
@@ -261,8 +261,8 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:Palette8)
     hidden function getColor(color as colorNames) as ColorType {
-        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
-        if(propTheme == 1) { return [0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000][color]; }
+        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
+        if(propTheme == 1) { return [0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
 
         return 0xFFFFFF;
     }
