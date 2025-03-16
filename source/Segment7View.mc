@@ -15,6 +15,9 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var clockWidth as Number;
     hidden var dataHeight as Number;
     hidden var textPadding as Number;
+    hidden var centerX as Number;
+    hidden var centerY as Number;
+    hidden var marginY as Number;
 
     hidden var fontClock as WatchUi.FontResource;
     hidden var fontData as WatchUi.FontResource;
@@ -24,6 +27,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var dataTopRight as String = "";
     hidden var dataBottomLeft as String = "";
     hidden var dataBottomRight as String = "";
+    hidden var dataBattery as String = "";
 
     hidden var canBurnIn as Boolean;
     hidden var isSleeping as Boolean = false;
@@ -48,7 +52,10 @@ class Segment7View extends WatchUi.WatchFace {
 
     enum colorNames {
         clockBg = 0,
-        clock
+        clock,
+        battBg,
+        battBar,
+        battEmpty
     }
 
     (:PaletteBase) const clockBgText = "##:##";
@@ -89,6 +96,10 @@ class Segment7View extends WatchUi.WatchFace {
             dataHeight = 27;
             textPadding = 6;
         }
+
+        centerX = Math.round(screenWidth / 2);
+        centerY = Math.round(screenHeight / 2);
+        marginY = Math.round(screenHeight / 25);
 
         fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
         canBurnIn = System.getDeviceSettings().requiresBurnInProtection;
@@ -151,11 +162,8 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info) as Void {
         var time_to_draw = Lang.format("$1$:$2$", [now.hour.format("%02d"), now.min.format("%02d")]);
-        var center_x = Math.round(screenWidth / 2);
-        var center_y = Math.round(screenHeight / 2);
         var half_clock_height = Math.round(clockHeight / 2);
         var half_clock_width = Math.round(clockWidth / 2);
-        var margin_y = Math.round(screenHeight / 25);
 
         // Clear
         dc.setColor(0x333333, 0x000000);
@@ -170,28 +178,31 @@ class Segment7View extends WatchUi.WatchFace {
         // Draw Clock
         dc.setColor(getColor(clockBg), Graphics.COLOR_TRANSPARENT);
         if(propShowClockBg) {
-            dc.drawText(center_x, center_y, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(centerX, centerY, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
         dc.setColor(getColor(clock), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(center_x, center_y, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(centerX, centerY, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Draw Data fields
         drawTextWithPadding(dc,
-                            center_x - half_clock_width + textPadding, center_y - half_clock_height - margin_y - dataHeight,
+                            centerX - half_clock_width + textPadding, centerY - half_clock_height - marginY - dataHeight,
                             fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT,
                             0xFFFFFF);
         drawTextWithPadding(dc,
-                            center_x + half_clock_width - textPadding, center_y - half_clock_height - margin_y - dataHeight,
+                            centerX + half_clock_width - textPadding, centerY - half_clock_height - marginY - dataHeight,
                             fontData, dataTopRight, Graphics.TEXT_JUSTIFY_RIGHT,
                             0xFFFFFF);
         drawTextWithPadding(dc,
-                            center_x - half_clock_width + textPadding, center_y + half_clock_height + margin_y,
+                            centerX - half_clock_width + textPadding, centerY + half_clock_height + marginY,
                             fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_LEFT,
                             0xFFFFFF);
         drawTextWithPadding(dc,
-                            center_x + half_clock_width - textPadding, center_y + half_clock_height + margin_y,
+                            centerX + half_clock_width - textPadding, centerY + half_clock_height + marginY,
                             fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT,
-                             0xFFFFFF);
+                            0xFFFFFF);
+
+        // Draw battery bar
+        drawBatteryBar(dc);
 
         // AOD burn in prevention pattern
         if(isSleeping and canBurnIn) {
@@ -211,6 +222,21 @@ class Segment7View extends WatchUi.WatchFace {
         dc.drawText(x, y, font, text, justify);
     }
 
+    hidden function drawBatteryBar(dc as Dc) {
+        var text_dim = dc.getTextDimensions("||||||", fontData) as [Lang.Number, Lang.Number];
+        dc.setColor(0x000000, 0x000000);
+        dc.fillRectangle(centerX - (text_dim[0] / 2) - textPadding, screenHeight - dataHeight - marginY, text_dim[0] + (textPadding * 2), text_dim[1]);
+
+        dc.setColor(getColor(battBg), Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX - (text_dim[0] / 2), screenHeight - dataHeight - marginY, fontData, "||||||", Graphics.TEXT_JUSTIFY_LEFT);
+        if(dataBattery.length() <= 1) {
+            dc.setColor(getColor(battEmpty), Graphics.COLOR_TRANSPARENT);
+        } else {
+            dc.setColor(getColor(battBar), Graphics.COLOR_TRANSPARENT);
+        }
+        dc.drawText(centerX - (text_dim[0] / 2), screenHeight - dataHeight - marginY, fontData, dataBattery, Graphics.TEXT_JUSTIFY_LEFT);
+    }
+
     hidden function drawPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         var i = 0;
@@ -222,14 +248,21 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:PaletteBase)
     hidden function getColor(color as colorNames) as ColorType {
-        if(propTheme == 0) { return [0x333333, 0xFFFFFF][color]; }
+        if(canBurnIn) {
+            if(propTheme == 0) { return [0x222222, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 1) { return [0x052234, 0xfbcb77, 0x222222, 0x00FF00, 0xFF0000][color]; }
+        } else {
+            if(propTheme == 0) { return [0x555555, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 1) { return [0x555555, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000][color]; }
+        }
 
         return 0xFFFFFF;
     }
 
     (:Palette8)
     hidden function getColor(color as colorNames) as ColorType {
-        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF][color]; }
+        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
+        if(propTheme == 1) { return [0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000][color]; }
 
         return 0xFFFFFF;
     }
@@ -253,6 +286,7 @@ class Segment7View extends WatchUi.WatchFace {
         dataTopRight = getValueByType(propFieldTopRight);
         dataBottomLeft = getValueByType(propFieldBottomLeft);
         dataBottomRight = getValueByType(propFieldBottomRight);
+        dataBattery = getBatteryBars();
     }
 
     hidden function updateWeather() as Void {
@@ -268,6 +302,15 @@ class Segment7View extends WatchUi.WatchFace {
         if(Weather.getCurrentConditions != null) {
             weatherCondition = Weather.getCurrentConditions();
         }
+    }
+
+    hidden function getBatteryBars() as String {
+        var bat = Math.round(System.getSystemStats().battery / 100.0 * 6);
+        var value = "";
+        for(var i = 0; i < bat; i++) {
+            value += "|";
+        }
+        return value;
     }
 
     hidden function getValueByType(complicationType as Number) as String {
