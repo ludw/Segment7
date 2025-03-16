@@ -36,13 +36,23 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propFieldBottomLeft as Number = 0;
     hidden var propFieldBottomRight as Number = 0;
 
+    hidden var propTheme as Number = 0;
     hidden var propShowClockBg as Boolean = true;
+
     hidden var propHourFormat as Number = 0;
     hidden var propDateFormat as Number = 0;
     hidden var propShowUnits as Boolean = true;
     hidden var propUnits as Number = 0;
     hidden var propWindUnit as Number = 0;
     hidden var propPressureUnit as Number = 0;
+
+    enum colorNames {
+        clockBg = 0,
+        clock
+    }
+
+    (:PaletteBase) const clockBgText = "##:##";
+    (:Palette8) const clockBgText = "$$:$$";
 
     function initialize() {
         WatchFace.initialize();
@@ -158,11 +168,11 @@ class Segment7View extends WatchUi.WatchFace {
         }
 
         // Draw Clock
-        dc.setColor(0x333333, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(getColor(clockBg), Graphics.COLOR_TRANSPARENT);
         if(propShowClockBg) {
-            dc.drawText(center_x, center_y, fontClock, "##:##", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(center_x, center_y, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
-        dc.setColor(0xFFFFFF, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(getColor(clock), Graphics.COLOR_TRANSPARENT);
         dc.drawText(center_x, center_y, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Draw Data fields
@@ -208,6 +218,20 @@ class Segment7View extends WatchUi.WatchFace {
             dc.drawText(0, i*48 + offset, fontPatterns, pattern, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
+    }
+
+    (:PaletteBase)
+    hidden function getColor(color as colorNames) as ColorType {
+        if(propTheme == 0) { return [0x333333, 0xFFFFFF][color]; }
+
+        return 0xFFFFFF;
+    }
+
+    (:Palette8)
+    hidden function getColor(color as colorNames) as ColorType {
+        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF][color]; }
+
+        return 0xFFFFFF;
     }
 
     hidden function updateProperties() as Void {
@@ -435,7 +459,9 @@ class Segment7View extends WatchUi.WatchFace {
             val = getPrecip();
         } else if(complicationType == 31) { // Wind
             val = getWind();
-        } else if(complicationType == 32) { // Millitary Date Time Group
+        } else if(complicationType == 32) { // Wind & Temp
+            val = Lang.format("$1$ $2$", [getWind(), getTemperature()]);
+        } else if(complicationType == 33) { // Millitary Date Time Group
             val = getDateTimeGroup();
         }
 

@@ -34,8 +34,8 @@
                 <listEntry value="28">Weather: high / low temperature</listEntry>
                 <listEntry value="29">Weather: Temperature</listEntry>
                 <listEntry value="30">Weather: Chance of Precipitation</listEntry>
-                <listEntry value="31">Weather: Wind</listEntry>
-                <listEntry value="32">Millitary Date Time Group</listEntry>
+                <listEntry value="32">Weather: Temperature + Wind</listEntry>
+                <listEntry value="33">Millitary Date Time Group</listEntry>
             </settingConfig>
         </setting>
 
@@ -72,8 +72,8 @@
                 <listEntry value="28">Weather: high / low temperature</listEntry>
                 <listEntry value="29">Weather: Temperature</listEntry>
                 <listEntry value="30">Weather: Chance of Precipitation</listEntry>
-                <listEntry value="31">Weather: Wind</listEntry>
-                <listEntry value="32">Millitary Date Time Group</listEntry>
+                <listEntry value="32">Weather: Temperature + Wind</listEntry>
+                <listEntry value="33">Millitary Date Time Group</listEntry>
             </settingConfig>
         </setting>
 
@@ -110,8 +110,8 @@
                 <listEntry value="28">Weather: high / low temperature</listEntry>
                 <listEntry value="29">Weather: Temperature</listEntry>
                 <listEntry value="30">Weather: Chance of Precipitation</listEntry>
-                <listEntry value="31">Weather: Wind</listEntry>
-                <listEntry value="32">Millitary Date Time Group</listEntry>
+                <listEntry value="32">Weather: Temperature + Wind</listEntry>
+                <listEntry value="33">Millitary Date Time Group</listEntry>
             </settingConfig>
         </setting>
 
@@ -149,7 +149,8 @@
                 <listEntry value="29">Weather: Temperature</listEntry>
                 <listEntry value="30">Weather: Chance of Precipitation</listEntry>
                 <listEntry value="31">Weather: Wind</listEntry>
-                <listEntry value="32">Millitary Date Time Group</listEntry>
+                <listEntry value="32">Weather: Temperature + Wind</listEntry>
+                <listEntry value="33">Millitary Date Time Group</listEntry>
             </settingConfig>
         </setting>
     </group>
