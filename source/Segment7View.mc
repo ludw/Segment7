@@ -25,6 +25,8 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var dataBottomLeft as String = "";
     hidden var dataBottomRight as String = "";
 
+    hidden var canBurnIn as Boolean;
+    hidden var isSleeping as Boolean = false;
     hidden var forceUpdate as Boolean = true;
 
     hidden var weatherCondition as CurrentConditions?;
@@ -79,6 +81,7 @@ class Segment7View extends WatchUi.WatchFace {
         }
 
         fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
+        canBurnIn = System.getDeviceSettings().requiresBurnInProtection;
 
         updateProperties();
         updateWeather();
@@ -119,12 +122,14 @@ class Segment7View extends WatchUi.WatchFace {
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() as Void {
         forceUpdate = true;
+        isSleeping = false;
         WatchUi.requestUpdate();
     }
 
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() as Void {
         forceUpdate = true;
+        isSleeping = true;
         WatchUi.requestUpdate();
     }
 
@@ -147,11 +152,8 @@ class Segment7View extends WatchUi.WatchFace {
         dc.clear();
 
         // Background pattern
-        dc.setColor(0x555555, 0x000000);
-        var i = 0;
-        while(i < Math.ceil(screenHeight / 48) + 1) {
-            dc.drawText(0, i*48, fontPatterns, "0000000000", Graphics.TEXT_JUSTIFY_LEFT);
-            i++;
+        if(!isSleeping or !canBurnIn) {
+            drawPattern(dc, "0000000000", 0x555555, 0);
         }
 
         // Draw Clock
@@ -177,8 +179,13 @@ class Segment7View extends WatchUi.WatchFace {
                             0xFFFFFF);
         drawTextWithPadding(dc,
                             center_x + half_clock_width - textPadding, center_y + half_clock_height + margin_y,
-                            fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_RIGHT,
+                            fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT,
                              0xFFFFFF);
+
+        // AOD burn in prevention pattern
+        if(isSleeping and canBurnIn) {
+            drawPattern(dc, "1111111111", 0x000000, now.min % 2);
+        }
     }
 
     hidden function drawTextWithPadding(dc as Dc, x as Number, y as Number, font as FontType, text as String, justify as TextJustification, color as ColorType) as Void {
@@ -191,6 +198,15 @@ class Segment7View extends WatchUi.WatchFace {
         }
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(x, y, font, text, justify);
+    }
+
+    hidden function drawPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        var i = 0;
+        while(i < Math.ceil(screenHeight / 48) + 1) {
+            dc.drawText(0, i*48 + offset, fontPatterns, pattern, Graphics.TEXT_JUSTIFY_LEFT);
+            i++;
+        }
     }
 
     hidden function updateProperties() as Void {
