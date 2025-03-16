@@ -62,21 +62,21 @@ class Segment7View extends WatchUi.WatchFace {
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
             clockHeight = 72;
             clockWidth = 211;
-            dataHeight = 22;
+            dataHeight = 20;
             textPadding = 3;
         } else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
             clockHeight = 100;
             clockWidth = 300;
-            dataHeight = 22;
+            dataHeight = 20;
             textPadding = 4;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
             clockHeight = 124;
             clockWidth = 364;
-            dataHeight = 29;
+            dataHeight = 27;
             textPadding = 6;
         }
 
@@ -154,6 +154,7 @@ class Segment7View extends WatchUi.WatchFace {
         // Background pattern
         if(!isSleeping or !canBurnIn) {
             drawPattern(dc, "0000000000", 0x555555, 0);
+            //drawPattern(dc, "2222222222", 0x555555, 0);
         }
 
         // Draw Clock
