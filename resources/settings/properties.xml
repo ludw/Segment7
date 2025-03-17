@@ -2,9 +2,9 @@
 
     <property id="fieldTopCenter" type="number">-1</property>
     <property id="fieldTopLeft" type="number">1</property>
-    <property id="fieldTopRight" type="number">2</property>
-    <property id="fieldBottomLeft" type="number">14</property>
-    <property id="fieldBottomRight" type="number">32</property>
+    <property id="fieldTopRight" type="number">35</property>
+    <property id="fieldBottomLeft" type="number">18</property>
+    <property id="fieldBottomRight" type="number">2</property>
     
     <property id="showClockBg" type="boolean">true</property>
     <property id="hourFormat" type="number">0</property>
@@ -13,4 +13,6 @@
     <property id="units" type="number">0</property>
     <property id="windUnit" type="number">0</property>
     <property id="pressureUnit" type="number">0</property>
+
+    <property id="tzOffset1" type="number">0</property>
 </properties>

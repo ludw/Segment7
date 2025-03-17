@@ -52,6 +52,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propUnits as Number = 0;
     hidden var propWindUnit as Number = 0;
     hidden var propPressureUnit as Number = 0;
+    hidden var propTzOffset as Number = 0;
 
     enum colorNames {
         clockBg = 0,
@@ -288,6 +289,7 @@ class Segment7View extends WatchUi.WatchFace {
         propUnits = Application.Properties.getValue("units") as Number;
         propWindUnit = Application.Properties.getValue("windUnit") as Number;
         propPressureUnit = Application.Properties.getValue("pressureUnit") as Number;
+        propTzOffset = Application.Properties.getValue("tzOffset1") as Number;
     }
 
     hidden function updateData(now as Gregorian.Info) as Void {
@@ -588,7 +590,7 @@ class Segment7View extends WatchUi.WatchFace {
                 }
             }
         } else if(complicationType == 42) { // Alt TZ 1
-            //val = secondaryTimezone(propTzOffset1, width);
+            val = secondaryTimezone(propTzOffset);
         } 
 
         return val;
@@ -990,7 +992,7 @@ class Segment7View extends WatchUi.WatchFace {
         return weekly_distance;
     }
 
-    hidden function secondaryTimezone(offset, width) as String {
+    hidden function secondaryTimezone(offset) as String {
         var val = "";
         var now = Time.now();
         var utc = Time.Gregorian.utcInfo(now, Time.FORMAT_MEDIUM);
@@ -1001,24 +1003,19 @@ class Segment7View extends WatchUi.WatchFace {
             min -= 60;
             hour += 1;
         }
-
         if(min < 0) {
             min += 60;
             hour -= 1;
         }
-
         if(hour < 0) {
             hour += 24;
         }
         if(hour > 23) {
             hour -= 24;
         }
+
         hour = formatHour(hour);
-        if(width < 5) {
-            val = Lang.format("$1$$2$", [hour.format("%02d"), min.format("%02d")]);
-        } else {
-            val = Lang.format("$1$:$2$", [hour.format("%02d"), min.format("%02d")]);
-        }
+        val = Lang.format("$1$:$2$", [hour.format("%02d"), min.format("%02d")]);
         return val;
     }
 
