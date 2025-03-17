@@ -6,7 +6,10 @@
     <property id="fieldBottomLeft" type="number">18</property>
     <property id="fieldBottomRight" type="number">2</property>
     
+    <property id="colorTheme" type="number">0</property>
+    <property id="backgroundPattern" type="number">1</property>
     <property id="showClockBg" type="boolean">true</property>
+    
     <property id="hourFormat" type="number">0</property>
     <property id="dateFormat" type="number">0</property>
     <property id="showUnits" type="boolean">true</property>

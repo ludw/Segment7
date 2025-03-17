@@ -239,6 +239,22 @@
         </settingConfig>
     </setting>
 
+
+    <setting propertyKey="@Properties.colorTheme" title="Color Theme">
+        <settingConfig type="list">
+            <listEntry value="0">White</listEntry>
+            <listEntry value="1">Yellow</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.backgroundPattern" title="Background pattern">
+        <settingConfig type="list">
+            <listEntry value="0">None</listEntry>
+            <listEntry value="1">Dots</listEntry>
+            <listEntry value="2">Lines</listEntry>
+        </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.showClockBg" title="Show clock background">
         <settingConfig type="boolean" />
     </setting>

@@ -44,6 +44,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propFieldBottomRight as Number = 0;
 
     hidden var propTheme as Number = 0;
+    hidden var propBackgroundPattern as Number = 0;
     hidden var propShowClockBg as Boolean = true;
 
     hidden var propHourFormat as Number = 0;
@@ -174,8 +175,8 @@ class Segment7View extends WatchUi.WatchFace {
 
         // Background pattern
         if(!isSleeping or !canBurnIn) {
-            drawPattern(dc, "0000000000", 0x555555, 0);
-            //drawPattern(dc, "2222222222", 0x555555, 0);
+            if(propBackgroundPattern == 1) { drawPattern(dc, "0000000000", 0x555555, 0); }
+            if(propBackgroundPattern == 2) { drawPattern(dc, "2222222222", 0x555555, 0); }
         }
 
         // Draw Clock
@@ -218,6 +219,8 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawTextWithPadding(dc as Dc, x as Number, y as Number, font as FontType, text as String, justify as TextJustification, color as ColorType) as Void {
+        if(text.length() == 0) { return; }
+
         var text_dim = dc.getTextDimensions(text, font) as [Lang.Number, Lang.Number];
         dc.setColor(0x000000, 0x000000);
         if(justify == Graphics.TEXT_JUSTIFY_LEFT) {
@@ -259,7 +262,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden function getColor(color as colorNames) as ColorType {
         if(canBurnIn) {
             if(propTheme == 0) { return [0x222222, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000][color]; }
-            if(propTheme == 1) { return [0x052234, 0xfbcb77, 0x222222, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 1) { return [0x222222, 0xfbcb77, 0x222222, 0x00FF00, 0xFF0000][color]; }
         } else {
             if(propTheme == 0) { return [0x555555, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
             if(propTheme == 1) { return [0x555555, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000][color]; }
@@ -282,6 +285,8 @@ class Segment7View extends WatchUi.WatchFace {
         propFieldTopRight = Application.Properties.getValue("fieldTopRight") as Number;
         propFieldBottomLeft = Application.Properties.getValue("fieldBottomLeft") as Number;
         propFieldBottomRight = Application.Properties.getValue("fieldBottomRight") as Number;
+        propTheme = Application.Properties.getValue("colorTheme") as Number;
+        propBackgroundPattern = Application.Properties.getValue("backgroundPattern") as Number;
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;
