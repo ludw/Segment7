@@ -34,7 +34,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var dataBattery as String = "";
     hidden var themeColors as Array<Graphics.ColorType> = [];
 
-    hidden var canBurnIn as Boolean;
+    hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
     hidden var forceUpdate as Boolean = true;
 
@@ -75,6 +75,10 @@ class Segment7View extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+
+        if(System.getDeviceSettings() has :requiresBurnInProtection) {
+            canBurnIn = System.getDeviceSettings().requiresBurnInProtection;
+        }
         updateProperties();
         
         screenHeight = Toybox.System.getDeviceSettings().screenHeight;
@@ -87,7 +91,7 @@ class Segment7View extends WatchUi.WatchFace {
             clockWidth = 163;
             dataHeight = 13;
             textPadding = 2;
-        } else if(screenHeight >= 240 and screenHeight <= 280) {
+        } else if(screenHeight >= 240 and screenHeight <= 280) { // Note: 240 is squeezed
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
@@ -97,7 +101,7 @@ class Segment7View extends WatchUi.WatchFace {
                 dataHeight = 20;
             }
             clockHeight = 72;
-            clockWidth = 211;
+            clockWidth = 215;
             textPadding = 3;
         } else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
@@ -109,7 +113,7 @@ class Segment7View extends WatchUi.WatchFace {
                 dataHeight = 20;
             }
             clockHeight = 100;
-            clockWidth = 300;
+            clockWidth = 308;
             textPadding = 4;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
@@ -121,7 +125,7 @@ class Segment7View extends WatchUi.WatchFace {
                 dataHeight = 27;
             }
             clockHeight = 124;
-            clockWidth = 364;
+            clockWidth = 372;
             textPadding = 6;
         }
 
@@ -130,9 +134,7 @@ class Segment7View extends WatchUi.WatchFace {
         marginY = Math.round(screenHeight / 25);
         halfClockHeight = Math.round(clockHeight / 2);
         halfClockWidth = Math.round(clockWidth / 2);
-
         fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
-        canBurnIn = System.getDeviceSettings().requiresBurnInProtection;
 
         updateWeather();
     }
@@ -281,7 +283,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:PaletteBase)
     hidden function setColorTheme() as Void {
-        //                              background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
+        //                                     background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
         if(canBurnIn) {
             if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x222222, 0xFFFFFF, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000]; }
             if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x222222, 0xfbcb77, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000]; }
@@ -295,12 +297,10 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:Palette8)
     hidden function setColorTheme() as Void {
-        //                          background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
+        //                                 background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
         if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; }
         if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; }
         if(propTheme == 2) { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0x000000, 0x000000, 0x000000, 0x00FF00, 0xFF0000]; }
-
-        return 0xFFFFFF;
     }
 
     hidden function updateProperties() as Void {
@@ -346,6 +346,8 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function updateWeather() as Void {
+        if(!(Toybox has :Weather) or !(Weather has :getCurrentConditions)) { return; }
+
         var now = Time.now().value();
 
         // Clear cached weather if older than 3 hours
@@ -767,8 +769,6 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function getWeatherCondition() as String {
-        var condition;
-
         // Early return if no weather data
         if (weatherCondition == null || weatherCondition.condition == null) {
             return "";
