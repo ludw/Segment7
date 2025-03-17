@@ -18,6 +18,8 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var centerX as Number;
     hidden var centerY as Number;
     hidden var marginY as Number;
+    hidden var halfClockHeight as Number;
+    hidden var halfClockWidth as Number;
 
     hidden var fontClock as WatchUi.FontResource;
     hidden var fontData as WatchUi.FontResource;
@@ -45,6 +47,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden var propTheme as Number = 0;
     hidden var propBackgroundPattern as Number = 0;
+    hidden var propFontSize as Number = 0;
     hidden var propShowClockBg as Boolean = true;
 
     hidden var propHourFormat as Number = 0;
@@ -56,8 +59,11 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propTzOffset as Number = 0;
 
     enum colorNames {
-        clockBg = 0,
+        background = 0,
+        pattern,
+        clockBg,
         clock,
+        dataValue,
         battBg,
         battBar,
         battEmpty
@@ -68,7 +74,8 @@ class Segment7View extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
-
+        updateProperties();
+        
         screenHeight = Toybox.System.getDeviceSettings().screenHeight;
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
 
@@ -81,35 +88,51 @@ class Segment7View extends WatchUi.WatchFace {
             textPadding = 2;
         } else if(screenHeight >= 240 and screenHeight <= 280) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
-            fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                dataHeight = 13;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            }
             clockHeight = 72;
             clockWidth = 211;
-            dataHeight = 20;
             textPadding = 3;
         } else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
-            fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                dataHeight = 13;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            }
             clockHeight = 100;
             clockWidth = 300;
-            dataHeight = 20;
             textPadding = 4;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
-            fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
+                dataHeight = 27;
+            }
             clockHeight = 124;
             clockWidth = 364;
-            dataHeight = 27;
             textPadding = 6;
         }
 
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
         marginY = Math.round(screenHeight / 25);
+        halfClockHeight = Math.round(clockHeight / 2);
+        halfClockWidth = Math.round(clockWidth / 2);
 
         fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
         canBurnIn = System.getDeviceSettings().requiresBurnInProtection;
 
-        updateProperties();
         updateWeather();
     }
 
@@ -166,17 +189,14 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info) as Void {
-        var half_clock_height = Math.round(clockHeight / 2);
-        var half_clock_width = Math.round(clockWidth / 2);
-
         // Clear
-        dc.setColor(0x333333, 0x000000);
+        dc.setColor(getColor(background), getColor(background));
         dc.clear();
 
         // Background pattern
         if(!isSleeping or !canBurnIn) {
-            if(propBackgroundPattern == 1) { drawPattern(dc, "0000000000", 0x555555, 0); }
-            if(propBackgroundPattern == 2) { drawPattern(dc, "2222222222", 0x555555, 0); }
+            if(propBackgroundPattern == 1) { drawPattern(dc, "0000000000", getColor(pattern), 0); }
+            if(propBackgroundPattern == 2) { drawPattern(dc, "2222222222", getColor(pattern), 0); }
         }
 
         // Draw Clock
@@ -189,25 +209,25 @@ class Segment7View extends WatchUi.WatchFace {
 
         // Draw Data fields
         drawTextWithPadding(dc,
-                            centerX, (centerY - half_clock_height - marginY - dataHeight) / 2 - (dataHeight / 2),
+                            centerX, (centerY - halfClockHeight - marginY - dataHeight) / 2 - (dataHeight / 2),
                             fontData, dataTopCenter, Graphics.TEXT_JUSTIFY_CENTER,
-                            0xFFFFFF);
+                            getColor(dataValue));
         drawTextWithPadding(dc,
-                            centerX - half_clock_width + textPadding, centerY - half_clock_height - marginY - dataHeight,
+                            centerX - halfClockWidth + textPadding, centerY - halfClockHeight - marginY - dataHeight,
                             fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT,
-                            0xFFFFFF);
+                            getColor(dataValue));
         drawTextWithPadding(dc,
-                            centerX + half_clock_width - textPadding, centerY - half_clock_height - marginY - dataHeight,
+                            centerX + halfClockWidth - textPadding, centerY - halfClockHeight - marginY - dataHeight,
                             fontData, dataTopRight, Graphics.TEXT_JUSTIFY_RIGHT,
-                            0xFFFFFF);
+                            getColor(dataValue));
         drawTextWithPadding(dc,
-                            centerX - half_clock_width + textPadding, centerY + half_clock_height + marginY,
+                            centerX - halfClockWidth + textPadding, centerY + halfClockHeight + marginY,
                             fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_LEFT,
-                            0xFFFFFF);
+                            getColor(dataValue));
         drawTextWithPadding(dc,
-                            centerX + half_clock_width - textPadding, centerY + half_clock_height + marginY,
+                            centerX + halfClockWidth - textPadding, centerY + halfClockHeight + marginY,
                             fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT,
-                            0xFFFFFF);
+                            getColor(dataValue));
 
         // Draw battery bar
         drawBatteryBar(dc);
@@ -222,7 +242,7 @@ class Segment7View extends WatchUi.WatchFace {
         if(text.length() == 0) { return; }
 
         var text_dim = dc.getTextDimensions(text, font) as [Lang.Number, Lang.Number];
-        dc.setColor(0x000000, 0x000000);
+        dc.setColor(getColor(background), getColor(background));
         if(justify == Graphics.TEXT_JUSTIFY_LEFT) {
             dc.fillRectangle(x - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
         } else if(justify == Graphics.TEXT_JUSTIFY_RIGHT) {
@@ -236,7 +256,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function drawBatteryBar(dc as Dc) {
         var text_dim = dc.getTextDimensions("}}}}}}", fontData) as [Lang.Number, Lang.Number];
-        dc.setColor(0x000000, 0x000000);
+        dc.setColor(getColor(background), getColor(background));
         dc.fillRectangle(centerX - (text_dim[0] / 2) - textPadding, screenHeight - dataHeight - marginY, text_dim[0] + (textPadding * 2), text_dim[1]);
 
         dc.setColor(getColor(battBg), Graphics.COLOR_TRANSPARENT);
@@ -260,12 +280,15 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:PaletteBase)
     hidden function getColor(color as colorNames) as ColorType {
+        //                              background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
         if(canBurnIn) {
-            if(propTheme == 0) { return [0x222222, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000][color]; }
-            if(propTheme == 1) { return [0x222222, 0xfbcb77, 0x222222, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 0) { return [0x000000, 0x555555, 0x222222, 0xFFFFFF, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 1) { return [0x000000, 0x555555, 0x222222, 0xfbcb77, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 2) { return [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0x222222, 0x000000, 0x222222, 0x00FF00, 0xFF0000][color]; }
         } else {
-            if(propTheme == 0) { return [0x555555, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
-            if(propTheme == 1) { return [0x555555, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 0) { return [0x000000, 0x555555, 0x555555, 0xFFFFFF, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 1) { return [0x000000, 0x555555, 0x555555, 0xFFFF00, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000][color]; }
+            if(propTheme == 2) { return [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0x000000, 0x000000, 0x555555, 0x00FF00, 0xFF0000][color]; }
         }
 
         return 0xFFFFFF;
@@ -273,8 +296,10 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:Palette8)
     hidden function getColor(color as colorNames) as ColorType {
-        if(propTheme == 0) { return [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
-        if(propTheme == 1) { return [0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
+        //                          background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
+        if(propTheme == 0) { return [0x000000, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
+        if(propTheme == 1) { return [0x000000, 0x555555, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000][color]; }
+        if(propTheme == 2) { return [0xFFFFFF, 0xAAAAAA, 0x000000, 0x000000, 0x000000, 0x000000, 0x00FF00, 0xFF0000][color]; }
 
         return 0xFFFFFF;
     }
@@ -287,6 +312,7 @@ class Segment7View extends WatchUi.WatchFace {
         propFieldBottomRight = Application.Properties.getValue("fieldBottomRight") as Number;
         propTheme = Application.Properties.getValue("colorTheme") as Number;
         propBackgroundPattern = Application.Properties.getValue("backgroundPattern") as Number;
+        propFontSize = Application.Properties.getValue("fontSize") as Number;
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;

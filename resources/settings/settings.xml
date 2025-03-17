@@ -242,8 +242,9 @@
 
     <setting propertyKey="@Properties.colorTheme" title="Color Theme">
         <settingConfig type="list">
-            <listEntry value="0">White</listEntry>
-            <listEntry value="1">Yellow</listEntry>
+            <listEntry value="0">White on Black</listEntry>
+            <listEntry value="1">Yellow on Black</listEntry>
+            <listEntry value="2">Black on White (No AOD with this theme)</listEntry>
         </settingConfig>
     </setting>
 
@@ -252,6 +253,13 @@
             <listEntry value="0">None</listEntry>
             <listEntry value="1">Dots</listEntry>
             <listEntry value="2">Lines</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.fontSize" title="Font size (updates next time watch face starts)">
+        <settingConfig type="list">
+            <listEntry value="0">Small</listEntry>
+            <listEntry value="1">Large</listEntry>
         </settingConfig>
     </setting>
 
