@@ -71,9 +71,9 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment47) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
             clockHeight = 47;
-            clockWidth = 153;
+            clockWidth = 157;
             dataHeight = 13;
-            textPadding = 0;
+            textPadding = 2;
         } else if(screenHeight >= 240 and screenHeight <= 280) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
