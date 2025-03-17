@@ -23,6 +23,8 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var fontData as WatchUi.FontResource;
     hidden var fontPatterns as WatchUi.FontResource;
     
+    hidden var dataClock as String = "";
+    hidden var dataTopCenter as String = "";
     hidden var dataTopLeft as String = "";
     hidden var dataTopRight as String = "";
     hidden var dataBottomLeft as String = "";
@@ -35,6 +37,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden var weatherCondition as CurrentConditions?;
 
+    hidden var propFieldTopCenter as Number = 0;
     hidden var propFieldTopLeft as Number = 0;
     hidden var propFieldTopRight as Number = 0;
     hidden var propFieldBottomLeft as Number = 0;
@@ -71,7 +74,7 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment47) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
             clockHeight = 47;
-            clockWidth = 157;
+            clockWidth = 163;
             dataHeight = 13;
             textPadding = 2;
         } else if(screenHeight >= 240 and screenHeight <= 280) {
@@ -124,7 +127,7 @@ class Segment7View extends WatchUi.WatchFace {
 
         if(now.sec % 60 == 0 or forceUpdate) {
             forceUpdate = false;
-            updateData();
+            updateData(now);
 
             if(now.min % 5 == 0 or weatherCondition == null) {
                 updateWeather();
@@ -161,7 +164,6 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info) as Void {
-        var time_to_draw = Lang.format("$1$:$2$", [now.hour.format("%02d"), now.min.format("%02d")]);
         var half_clock_height = Math.round(clockHeight / 2);
         var half_clock_width = Math.round(clockWidth / 2);
 
@@ -181,9 +183,13 @@ class Segment7View extends WatchUi.WatchFace {
             dc.drawText(centerX, centerY, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
         dc.setColor(getColor(clock), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, centerY, fontClock, time_to_draw, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(centerX, centerY, fontClock, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Draw Data fields
+        drawTextWithPadding(dc,
+                            centerX, (centerY - half_clock_height - marginY - dataHeight) / 2 - (dataHeight / 2),
+                            fontData, dataTopCenter, Graphics.TEXT_JUSTIFY_CENTER,
+                            0xFFFFFF);
         drawTextWithPadding(dc,
                             centerX - half_clock_width + textPadding, centerY - half_clock_height - marginY - dataHeight,
                             fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT,
@@ -215,8 +221,10 @@ class Segment7View extends WatchUi.WatchFace {
         dc.setColor(0x000000, 0x000000);
         if(justify == Graphics.TEXT_JUSTIFY_LEFT) {
             dc.fillRectangle(x - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
-        } else {
+        } else if(justify == Graphics.TEXT_JUSTIFY_RIGHT) {
             dc.fillRectangle(x - text_dim[0] - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
+        } else { // TEXT_JUSTIFY_CENTER
+            dc.fillRectangle(x - (text_dim[0] / 2) - textPadding, y - textPadding, text_dim[0] + (textPadding * 2), text_dim[1] + (textPadding * 2));
         }
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(x, y, font, text, justify);
@@ -268,6 +276,7 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function updateProperties() as Void {
+        propFieldTopCenter = Application.Properties.getValue("fieldTopCenter") as Number;
         propFieldTopLeft = Application.Properties.getValue("fieldTopLeft") as Number;
         propFieldTopRight = Application.Properties.getValue("fieldTopRight") as Number;
         propFieldBottomLeft = Application.Properties.getValue("fieldBottomLeft") as Number;
@@ -281,12 +290,26 @@ class Segment7View extends WatchUi.WatchFace {
         propPressureUnit = Application.Properties.getValue("pressureUnit") as Number;
     }
 
-    hidden function updateData() as Void {
+    hidden function updateData(now as Gregorian.Info) as Void {
+        dataClock = getClockData(now);
+        dataTopCenter = getValueByType(propFieldTopCenter);
         dataTopLeft = getValueByType(propFieldTopLeft);
         dataTopRight = getValueByType(propFieldTopRight);
         dataBottomLeft = getValueByType(propFieldBottomLeft);
         dataBottomRight = getValueByType(propFieldBottomRight);
         dataBattery = getBatteryBars();
+    }
+
+    hidden function getClockData(now as Gregorian.Info) as String {
+         return Lang.format("$1$:$2$", [formatHour(now.hour), now.min.format("%02d")]);
+    }
+
+    hidden function formatHour(hour as Number) as Number {
+        if((!System.getDeviceSettings().is24Hour and propHourFormat == 0) or propHourFormat == 2) {
+            hour = hour % 12;
+            if(hour == 0) { hour = 12; }
+        }
+        return hour;
     }
 
     hidden function updateWeather() as Void {
@@ -379,7 +402,30 @@ class Segment7View extends WatchUi.WatchFace {
                     val = ActivityMonitor.getInfo().timeToRecovery.format(numberFormat);
                 }
             }
-        } else if(complicationType == 11) { // HR
+        } else if(complicationType == 11) { // VO2 Max Running
+            var profile = UserProfile.getProfile();
+            if(profile has :vo2maxRunning) {
+                if(profile.vo2maxRunning != null) {
+                    val = profile.vo2maxRunning.format(numberFormat);
+                }
+            }
+        } else if(complicationType == 12) { // VO2 Max Cycling
+            var profile = UserProfile.getProfile();
+            if(profile has :vo2maxCycling) {
+                if(profile.vo2maxCycling != null) {
+                    val = profile.vo2maxCycling.format(numberFormat);
+                }
+            }
+        } else if(complicationType == 13) { // Training status
+            if (Toybox has :Complications) {
+                try {
+                    var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
+                    if (complication != null && complication.value != null) {
+                        val = complication.value.toUpper();
+                    }
+                } catch(e) {}
+            }
+        } else if(complicationType == 14) { // HR
             // Try to retrieve live HR from Activity::Info
             var activity_info = Activity.getActivityInfo();
             var sample = activity_info.currentHeartRate;
@@ -392,7 +438,16 @@ class Segment7View extends WatchUi.WatchFace {
                     val = hist.heartRate.format("%01d");
                 }
             }
-        } else if(complicationType == 12) { // Stress
+        } else if(complicationType == 15) { // PulseOx
+            if (Toybox has :Complications) {
+                try {
+                    var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_PULSE_OX));
+                    if (complication != null && complication.value != null) {
+                        val = complication.value.format(numberFormat);
+                    }
+                } catch(e) {}
+            }
+        } else if(complicationType == 16) { // Stress
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getStressHistory)) {
                 var st_iterator = Toybox.SensorHistory.getStressHistory({:period => 1});
                 var st = st_iterator.next();
@@ -400,7 +455,7 @@ class Segment7View extends WatchUi.WatchFace {
                     val = st.data.format(numberFormat);
                 }
             }
-        } else if(complicationType == 13) { // Body battery
+        } else if(complicationType == 17) { // Body battery
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getBodyBatteryHistory)) {
                 var bb_iterator = Toybox.SensorHistory.getBodyBatteryHistory({:period => 1});
                 var bb = bb_iterator.next();
@@ -408,17 +463,17 @@ class Segment7View extends WatchUi.WatchFace {
                     val = bb.data.format(numberFormat);
                 }
             }
-        } else if(complicationType == 14) { // Steps / day
+        } else if(complicationType == 18) { // Steps / day
             if(ActivityMonitor.getInfo().steps != null) {
                 val = ActivityMonitor.getInfo().steps.format(numberFormat);
             }
-        } else if(complicationType == 15) { // Wheelchair pushes
+        } else if(complicationType == 19) { // Wheelchair pushes
             if(ActivityMonitor.getInfo() has :pushes) {
                 if(ActivityMonitor.getInfo().pushes != null) {
                     val = ActivityMonitor.getInfo().pushes.format(numberFormat);
                 }
             }
-        } else if(complicationType == 16) { // Altitude (m)
+        } else if(complicationType == 20) { // Altitude (m)
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
                 var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
                 var elv = elv_iterator.next();
@@ -426,7 +481,7 @@ class Segment7View extends WatchUi.WatchFace {
                     val = valueAndUnit(elv.data.format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 17) { // Altitude (ft)
+        } else if(complicationType == 21) { // Altitude (ft)
             if ((Toybox has :SensorHistory) and (Toybox.SensorHistory has :getElevationHistory)) {
                 var elv_iterator = Toybox.SensorHistory.getElevationHistory({:period => 1});
                 var elv = elv_iterator.next();
@@ -434,30 +489,30 @@ class Segment7View extends WatchUi.WatchFace {
                     val = valueAndUnit((elv.data * 3.28084).format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 18) { // Sea level pressure
+        } else if(complicationType == 22) { // Sea level pressure
             var info = Activity.getActivityInfo();
             if (info has :meanSeaLevelPressure && info.meanSeaLevelPressure != null) {
                 val = formatPressure(info.meanSeaLevelPressure / 100.0, numberFormat);
             }
-        } else if(complicationType == 19) { // Raw Barometric pressure
+        } else if(complicationType == 23) { // Raw Barometric pressure
             var info = Activity.getActivityInfo();
             if (info has :rawAmbientPressure && info.rawAmbientPressure != null) {
                 val = formatPressure(info.rawAmbientPressure / 100.0, numberFormat);
             }
-        } else if(complicationType == 20) { // Weight
+        } else if(complicationType == 24) { // Weight
             var profile = UserProfile.getProfile();
             if(profile has :weight) {
                 if(profile.weight != null) {
                     val = valueAndUnit(formatWeight(profile.weight), complicationType);
                 }
             }
-        } else if(complicationType == 21) { // Calories
+        } else if(complicationType == 25) { // Calories
             if (ActivityMonitor.getInfo() has :calories) {
                 if(ActivityMonitor.getInfo().calories != null) {
                     val = valueAndUnit(ActivityMonitor.getInfo().calories.format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 22) { // Act Calories
+        } else if(complicationType == 26) { // Act Calories
             var rest_calories = getRestCalories();
             // Get total calories and subtract rest calories
             if (ActivityMonitor.getInfo() has :calories && ActivityMonitor.getInfo().calories != null && rest_calories > 0) {
@@ -466,26 +521,36 @@ class Segment7View extends WatchUi.WatchFace {
                     val = valueAndUnit(active_calories.format(numberFormat), complicationType);
                 }
             }
-        } else if(complicationType == 23) { // Week number
+        } else if(complicationType == 27) { // Active / Total calories
+            var rest_calories = getRestCalories();
+            var total_calories = 0;
+            // Get total calories and subtract rest calories
+            if (ActivityMonitor.getInfo() has :calories && ActivityMonitor.getInfo().calories != null) {
+                total_calories = ActivityMonitor.getInfo().calories;
+            }
+            var active_calories = total_calories - rest_calories;
+            active_calories = (active_calories > 0) ? active_calories : 0; // Ensure active calories is not negative
+            val = active_calories.format(numberFormat) + "/" + total_calories.format(numberFormat);
+        } else if(complicationType == 28) { // Week number
             var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
             var week_number = isoWeekNumber(today.year, today.month, today.day);
             val = week_number.format(numberFormat);
-        } else if(complicationType == 24) { // Battery percentage
+        } else if(complicationType == 29) { // Battery percentage
             var battery = System.getSystemStats().battery;
             val = Lang.format("$1$", [battery.format("%d")]);
-        } else if(complicationType == 25) { // Battery days remaining
+        } else if(complicationType == 30) { // Battery days remaining
             if(System.getSystemStats() has :batteryInDays) {
                 if (System.getSystemStats().batteryInDays != null){
                     var sample = Math.round(System.getSystemStats().batteryInDays);
                     val = Lang.format("$1$", [sample.format(numberFormat)]);
                 }
             }
-        } else if(complicationType == 26) { // Notification count
+        } else if(complicationType == 31) { // Notification count
             var notif_count = System.getDeviceSettings().notificationCount;
             if(notif_count != null) {
                 val = notif_count.format(numberFormat);
             }
-        } else if(complicationType == 27) { // Solar intensity
+        } else if(complicationType == 32) { // Solar intensity
             if (Toybox has :Complications) {
                 try {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_SOLAR_INPUT));
@@ -494,19 +559,37 @@ class Segment7View extends WatchUi.WatchFace {
                     }
                 } catch(e) {}
             }
-        } else if(complicationType == 28) { // High/low temp
+        } else if(complicationType == 33) { // Weather condition
+            val = getWeatherCondition();
+        }  else if(complicationType == 34) { // High/low temp
             val = getHighLow();
-        } else if(complicationType == 29) { // Temperature
+        } else if(complicationType == 35) { // Temperature
             val = getTemperature();
-        } else if(complicationType == 30) { // Precipitation chance
+        } else if(complicationType == 36) { // Precipitation chance
             val = getPrecip();
-        } else if(complicationType == 31) { // Wind
+        } else if(complicationType == 37) { // Wind
             val = getWind();
-        } else if(complicationType == 32) { // Wind & Temp
+        } else if(complicationType == 38) { // Wind & Temp
             val = Lang.format("$1$ $2$", [getWind(), getTemperature()]);
-        } else if(complicationType == 33) { // Millitary Date Time Group
+        } else if(complicationType == 39) { // Millitary Date Time Group
             val = getDateTimeGroup();
-        }
+        } else if(complicationType == 40) { // Next Sun Event
+            var nextSunEventArray = getNextSunEvent();
+            if(nextSunEventArray != null && nextSunEventArray.size() == 2) { 
+                var nextSunEvent = Time.Gregorian.info(nextSunEventArray[0], Time.FORMAT_SHORT);
+                var nextSunEventHour = formatHour(nextSunEvent.hour);
+                val = Lang.format("$1$:$2$", [nextSunEventHour.format("%02d"), nextSunEvent.min.format("%02d")]);
+            }
+        } else if(complicationType == 41) { // Respiration rate
+            if(ActivityMonitor.getInfo() has :respirationRate) {
+                var resp_rate = ActivityMonitor.getInfo().respirationRate;
+                if(resp_rate != null) {
+                    val = resp_rate.format(numberFormat);
+                }
+            }
+        } else if(complicationType == 42) { // Alt TZ 1
+            //val = secondaryTimezone(propTzOffset1, width);
+        } 
 
         return val;
     }
@@ -547,61 +630,53 @@ class Segment7View extends WatchUi.WatchFace {
         var today = Time.Gregorian.info(now, Time.FORMAT_SHORT);
         var value = "";
 
-        switch(propDateFormat) {
-            case 0: // Default: THU 14
-                value = Lang.format("$1$ $2$", [
-                    dayName(today.day_of_week),
-                    today.day
-                ]);
-                break;
-            case 1: // ISO: 2024-03-14
-                value = Lang.format("$1$-$2$-$3$", [
-                    today.year,
-                    today.month.format("%02d"),
-                    today.day.format("%02d")
-                ]);
-                break;
-            case 2: // US: 03/14/2024
-                value = Lang.format("$1$/$2$/$3$", [
-                    today.month.format("%02d"),
-                    today.day.format("%02d"),
-                    today.year
-                ]);
-                break;
-            case 3: // EU: 14.03.2024
-                value = Lang.format("$1$.$2$.$3$", [
-                    today.day.format("%02d"),
-                    today.month.format("%02d"),
-                    today.year
-                ]);
-                break;
-             case 4: // THU 14 MAR
-                value = Lang.format("$1$ $2$ $3$", [
-                    dayName(today.day_of_week),
-                    today.day,
-                    monthName(today.month)
-                ]);
-                break;
-            case 5: // 14 MAR
-                value = Lang.format("$1$ $2$", [
-                    today.day,
-                    monthName(today.month)
-                ]);
-                break;
-            case 6: // 14 MAR (Week number)
-                value = Lang.format("$1$ $2$ (W$3$)", [
-                    today.day,
-                    monthName(today.month),
-                    isoWeekNumber(today.year, today.month, today.day)
-                ]);
-                break;
-            case 7: // THU 14 (Week number)
-                value = Lang.format("$1$ $2$ (W$3$)", [
-                    dayName(today.day_of_week),
-                    today.day,
-                    isoWeekNumber(today.year, today.month, today.day)
-                ]);
-                break;
+        if(propDateFormat == 0){ // Default: THU 14
+            value = Lang.format("$1$ $2$", [
+                dayName(today.day_of_week),
+                today.day
+            ]);
+        } else if(propDateFormat == 1){ // ISO: 2024-03-14
+            value = Lang.format("$1$-$2$-$3$", [
+                today.year,
+                today.month.format("%02d"),
+                today.day.format("%02d")
+            ]);
+        } else if(propDateFormat == 2){ // US: 03/14/2024
+            value = Lang.format("$1$/$2$/$3$", [
+                today.month.format("%02d"),
+                today.day.format("%02d"),
+                today.year
+            ]);
+        } else if(propDateFormat == 3){ // EU: 14.03.2024
+            value = Lang.format("$1$.$2$.$3$", [
+                today.day.format("%02d"),
+                today.month.format("%02d"),
+                today.year
+            ]);
+         } else if(propDateFormat == 4){ // THU 14 MAR
+            value = Lang.format("$1$ $2$ $3$", [
+                dayName(today.day_of_week),
+                today.day,
+                monthName(today.month)
+            ]);
+        } else if(propDateFormat == 5){ // 14 MAR
+            value = Lang.format("$1$ $2$", [
+                today.day,
+                monthName(today.month)
+            ]);
+        } else if(propDateFormat == 6){ // 14 MAR (Week number)
+            value = Lang.format("$1$ $2$ (W$3$)", [
+                today.day,
+                monthName(today.month),
+                isoWeekNumber(today.year, today.month, today.day)
+            ]);
+        } else if(propDateFormat == 7){ // THU 14 (Week number)
+            value = Lang.format("$1$ $2$ (W$3$)", [
+                dayName(today.day_of_week),
+                today.day,
+                isoWeekNumber(today.year, today.month, today.day)
+            ]);
+            
         }
         return value;
     }
@@ -656,6 +731,74 @@ class Segment7View extends WatchUi.WatchFace {
             weight = grams * 0.00220462;
         }
         return weight < 100 ? weight.format("%.1f") : weight.format("%d");
+    }
+
+    hidden function getWeatherCondition() as String {
+        var condition;
+
+        // Early return if no weather data
+        if (weatherCondition == null || weatherCondition.condition == null) {
+            return "";
+        }
+
+        var weatherNames = [
+            "CLEAR",
+            "PARTLY CLOUDY",
+            "MOSTLY CLOUDY",
+            "RAIN",
+            "SNOW",
+            "WINDY",
+            "THUNDERSTORMS",
+            "WINTRY MIX",
+            "FOG",
+            "HAZY",
+            "HAIL",
+            "SCATTERED SHOWERS",
+            "SCATTERED THUNDERSTORMS",
+            "UNKNOWN PRECIPITATION",
+            "LIGHT RAIN",
+            "HEAVY RAIN",
+            "LIGHT SNOW",
+            "HEAVY SNOW",
+            "LIGHT RAIN SNOW",
+            "HEAVY RAIN SNOW",
+            "CLOUDY",
+            "RAIN SNOW",
+            "PARTLY CLEAR",
+            "MOSTLY CLEAR",
+            "LIGHT SHOWERS",
+            "SHOWERS",
+            "HEAVY SHOWERS",
+            "CHANCE OF SHOWERS",
+            "CHANCE OF THUNDERSTORMS",
+            "MIST",
+            "DUST",
+            "DRIZZLE",
+            "TORNADO",
+            "SMOKE",
+            "ICE",
+            "SAND",
+            "SQUALL",
+            "SANDSTORM",
+            "VOLCANIC ASH",
+            "HAZE",
+            "FAIR",
+            "HURRICANE",
+            "TROPICAL STORM",
+            "CHANCE OF SNOW",
+            "CHANCE OF RAIN SNOW",
+            "CLOUDY CHANCE OF RAIN",
+            "CLOUDY CHANCE OF SNOW",
+            "CLOUDY CHANCE OF RAIN SNOW",
+            "FLURRIES",
+            "FREEZING RAIN",
+            "SLEET",
+            "ICE SNOW",
+            "THIN CLOUDS",
+            "UNKNOWN",
+        ];
+
+        return weatherNames[weatherCondition.condition];
     }
 
     hidden function getTemperature() as String {
@@ -769,6 +912,40 @@ class Segment7View extends WatchUi.WatchFace {
         return ret;
     }
 
+    hidden function getNextSunEvent() as Array {
+        var now = Time.now();
+        if (weatherCondition != null) {
+            var loc = weatherCondition.observationLocationPosition;
+            if (loc != null) {
+                var nextSunEvent = null;
+                var sunrise = Weather.getSunrise(loc, now);
+                var sunset = Weather.getSunset(loc, now);
+                var isNight = false;
+
+                if ((sunrise != null) && (sunset != null)) {
+                    if (sunrise.lessThan(now)) { 
+                        //if sunrise was already, take tomorrows
+                        sunrise = Weather.getSunrise(loc, Time.today().add(new Time.Duration(86401)));
+                    }
+                    if (sunset.lessThan(now)) { 
+                        //if sunset was already, take tomorrows
+                        sunset = Weather.getSunset(loc, Time.today().add(new Time.Duration(86401)));
+                    }
+                    if (sunrise.lessThan(sunset)) { 
+                        nextSunEvent = sunrise;
+                        isNight = true;
+                    } else {
+                        nextSunEvent = sunset;
+                        isNight = false;
+                    }
+                    return [nextSunEvent, isNight];
+                }
+                
+            }
+        }
+        return [];
+    }
+
     hidden function getRestCalories() as Number {
         var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var profile = UserProfile.getProfile();
@@ -811,6 +988,38 @@ class Segment7View extends WatchUi.WatchFace {
             }
         }
         return weekly_distance;
+    }
+
+    hidden function secondaryTimezone(offset, width) as String {
+        var val = "";
+        var now = Time.now();
+        var utc = Time.Gregorian.utcInfo(now, Time.FORMAT_MEDIUM);
+        var min = utc.min + (offset % 60);
+        var hour = (utc.hour + Math.floor(offset / 60)) % 24;
+
+        if(min > 59) {
+            min -= 60;
+            hour += 1;
+        }
+
+        if(min < 0) {
+            min += 60;
+            hour -= 1;
+        }
+
+        if(hour < 0) {
+            hour += 24;
+        }
+        if(hour > 23) {
+            hour -= 24;
+        }
+        hour = formatHour(hour);
+        if(width < 5) {
+            val = Lang.format("$1$$2$", [hour.format("%02d"), min.format("%02d")]);
+        } else {
+            val = Lang.format("$1$:$2$", [hour.format("%02d"), min.format("%02d")]);
+        }
+        return val;
     }
 
     hidden function dayName(day_of_week as Number) as String {

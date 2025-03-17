@@ -1,5 +1,6 @@
 <properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
 
+    <property id="fieldTopCenter" type="number">-1</property>
     <property id="fieldTopLeft" type="number">1</property>
     <property id="fieldTopRight" type="number">2</property>
     <property id="fieldBottomLeft" type="number">14</property>
