@@ -14,9 +14,9 @@
             <listEntry value="10">Time to Recovery (h) *</listEntry>
             <listEntry value="11">VO2 Max Running</listEntry>
             <listEntry value="12">VO2 Max Cycling</listEntry>
-            <listEntry value="13">Training status</listEntry>
+            <listEntry value="13">Training status *</listEntry>
             <listEntry value="14">Heart Rate</listEntry>
-            <listEntry value="15">Pulse Ox</listEntry>
+            <listEntry value="15">Pulse Ox *</listEntry>
             <listEntry value="16">Stress score</listEntry>
             <listEntry value="17">Body battery</listEntry>
             <listEntry value="18">Steps / day</listEntry>
@@ -33,7 +33,7 @@
             <listEntry value="29">Battery percentage</listEntry>
             <listEntry value="30">Battery days remaining *</listEntry>
             <listEntry value="31">Notification count</listEntry>
-            <listEntry value="32">Solar intensity</listEntry>
+            <listEntry value="32">Solar intensity *</listEntry>
             <listEntry value="33">Weather: Current Conditions</listEntry>
             <listEntry value="34">Weather: High / Low temperature</listEntry>
             <listEntry value="35">Weather: Temperature</listEntry>
@@ -44,6 +44,7 @@
             <listEntry value="40">Next Sunset / Sunrise</listEntry>
             <listEntry value="41">Respiration rate</listEntry>
             <listEntry value="42">Alternative Timezone</listEntry>
+            <listEntry value="43">Next Calendar Event *</listEntry>
         </settingConfig>
     </setting>
 
@@ -62,9 +63,9 @@
             <listEntry value="10">Time to Recovery (h) *</listEntry>
             <listEntry value="11">VO2 Max Running</listEntry>
             <listEntry value="12">VO2 Max Cycling</listEntry>
-            <listEntry value="13">Training status</listEntry>
+            <listEntry value="13">Training status *</listEntry>
             <listEntry value="14">Heart Rate</listEntry>
-            <listEntry value="15">Pulse Ox</listEntry>
+            <listEntry value="15">Pulse Ox *</listEntry>
             <listEntry value="16">Stress score</listEntry>
             <listEntry value="17">Body battery</listEntry>
             <listEntry value="18">Steps / day</listEntry>
@@ -81,7 +82,7 @@
             <listEntry value="29">Battery percentage</listEntry>
             <listEntry value="30">Battery days remaining *</listEntry>
             <listEntry value="31">Notification count</listEntry>
-            <listEntry value="32">Solar intensity</listEntry>
+            <listEntry value="32">Solar intensity *</listEntry>
             <listEntry value="33">Weather: Current Conditions</listEntry>
             <listEntry value="34">Weather: High / Low temperature</listEntry>
             <listEntry value="35">Weather: Temperature</listEntry>
@@ -92,6 +93,7 @@
             <listEntry value="40">Next Sunset / Sunrise</listEntry>
             <listEntry value="41">Respiration rate</listEntry>
             <listEntry value="42">Alternative Timezone</listEntry>
+            <listEntry value="43">Next Calendar Event *</listEntry>
         </settingConfig>
     </setting>
 
@@ -110,9 +112,9 @@
             <listEntry value="10">Time to Recovery (h) *</listEntry>
             <listEntry value="11">VO2 Max Running</listEntry>
             <listEntry value="12">VO2 Max Cycling</listEntry>
-            <listEntry value="13">Training status</listEntry>
+            <listEntry value="13">Training status *</listEntry>
             <listEntry value="14">Heart Rate</listEntry>
-            <listEntry value="15">Pulse Ox</listEntry>
+            <listEntry value="15">Pulse Ox *</listEntry>
             <listEntry value="16">Stress score</listEntry>
             <listEntry value="17">Body battery</listEntry>
             <listEntry value="18">Steps / day</listEntry>
@@ -129,7 +131,7 @@
             <listEntry value="29">Battery percentage</listEntry>
             <listEntry value="30">Battery days remaining *</listEntry>
             <listEntry value="31">Notification count</listEntry>
-            <listEntry value="32">Solar intensity</listEntry>
+            <listEntry value="32">Solar intensity *</listEntry>
             <listEntry value="33">Weather: Current Conditions</listEntry>
             <listEntry value="34">Weather: High / Low temperature</listEntry>
             <listEntry value="35">Weather: Temperature</listEntry>
@@ -140,6 +142,7 @@
             <listEntry value="40">Next Sunset / Sunrise</listEntry>
             <listEntry value="41">Respiration rate</listEntry>
             <listEntry value="42">Alternative Timezone</listEntry>
+            <listEntry value="43">Next Calendar Event *</listEntry>
         </settingConfig>
     </setting>
 
@@ -158,9 +161,9 @@
             <listEntry value="10">Time to Recovery (h) *</listEntry>
             <listEntry value="11">VO2 Max Running</listEntry>
             <listEntry value="12">VO2 Max Cycling</listEntry>
-            <listEntry value="13">Training status</listEntry>
+            <listEntry value="13">Training status *</listEntry>
             <listEntry value="14">Heart Rate</listEntry>
-            <listEntry value="15">Pulse Ox</listEntry>
+            <listEntry value="15">Pulse Ox *</listEntry>
             <listEntry value="16">Stress score</listEntry>
             <listEntry value="17">Body battery</listEntry>
             <listEntry value="18">Steps / day</listEntry>
@@ -177,7 +180,7 @@
             <listEntry value="29">Battery percentage</listEntry>
             <listEntry value="30">Battery days remaining *</listEntry>
             <listEntry value="31">Notification count</listEntry>
-            <listEntry value="32">Solar intensity</listEntry>
+            <listEntry value="32">Solar intensity *</listEntry>
             <listEntry value="33">Weather: Current Conditions</listEntry>
             <listEntry value="34">Weather: High / Low temperature</listEntry>
             <listEntry value="35">Weather: Temperature</listEntry>
@@ -188,6 +191,7 @@
             <listEntry value="40">Next Sunset / Sunrise</listEntry>
             <listEntry value="41">Respiration rate</listEntry>
             <listEntry value="42">Alternative Timezone</listEntry>
+            <listEntry value="43">Next Calendar Event *</listEntry>
         </settingConfig>
     </setting>
 
@@ -206,9 +210,9 @@
             <listEntry value="10">Time to Recovery (h) *</listEntry>
             <listEntry value="11">VO2 Max Running</listEntry>
             <listEntry value="12">VO2 Max Cycling</listEntry>
-            <listEntry value="13">Training status</listEntry>
+            <listEntry value="13">Training status *</listEntry>
             <listEntry value="14">Heart Rate</listEntry>
-            <listEntry value="15">Pulse Ox</listEntry>
+            <listEntry value="15">Pulse Ox *</listEntry>
             <listEntry value="16">Stress score</listEntry>
             <listEntry value="17">Body battery</listEntry>
             <listEntry value="18">Steps / day</listEntry>
@@ -225,7 +229,7 @@
             <listEntry value="29">Battery percentage</listEntry>
             <listEntry value="30">Battery days remaining *</listEntry>
             <listEntry value="31">Notification count</listEntry>
-            <listEntry value="32">Solar intensity</listEntry>
+            <listEntry value="32">Solar intensity *</listEntry>
             <listEntry value="33">Weather: Current Conditions</listEntry>
             <listEntry value="34">Weather: High / Low temperature</listEntry>
             <listEntry value="35">Weather: Temperature</listEntry>
@@ -236,6 +240,7 @@
             <listEntry value="40">Next Sunset / Sunrise</listEntry>
             <listEntry value="41">Respiration rate</listEntry>
             <listEntry value="42">Alternative Timezone</listEntry>
+            <listEntry value="43">Next Calendar Event *</listEntry>
         </settingConfig>
     </setting>
 
@@ -244,7 +249,24 @@
         <settingConfig type="list">
             <listEntry value="0">White on Black</listEntry>
             <listEntry value="1">Yellow on Black</listEntry>
-            <listEntry value="2">Black on White (No AOD with this theme)</listEntry>
+            <listEntry value="2">Green on Black</listEntry>
+            <listEntry value="3">Blue on Black</listEntry>
+            <listEntry value="4">Red on Black</listEntry>
+            <listEntry value="5">Orange on Black</listEntry>
+            <listEntry value="6">Black on White (No AOD with this theme)</listEntry>
+            <listEntry value="7">Red on White (No AOD with this theme)</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.accentColorOn" title="Accent color on">
+        <settingConfig type="list">
+            <listEntry value="0">No accent color</listEntry>
+            <listEntry value="1">Top field</listEntry>
+            <listEntry value="2">Top Left field</listEntry>
+            <listEntry value="3">Top Right field</listEntry>
+            <listEntry value="4">Bottom left field</listEntry>
+            <listEntry value="5">Bottom right field</listEntry>
+            <listEntry value="6">Both Bottom fields</listEntry>
         </settingConfig>
     </setting>
 
@@ -260,6 +282,7 @@
         <settingConfig type="list">
             <listEntry value="0">Small</listEntry>
             <listEntry value="1">Large</listEntry>
+            <listEntry value="2">Small for top field, Large for the rest</listEntry>
         </settingConfig>
     </setting>
 

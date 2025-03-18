@@ -22,6 +22,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var halfClockWidth as Number;
 
     hidden var fontClock as WatchUi.FontResource;
+    hidden var fontTopData as WatchUi.FontResource;
     hidden var fontData as WatchUi.FontResource;
     hidden var fontPatterns as WatchUi.FontResource;
     
@@ -47,6 +48,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propFieldBottomRight as Number = 0;
 
     hidden var propTheme as Number = 0;
+    hidden var propAccentColorOn as Number = 0;
     hidden var propBackgroundPattern as Number = 0;
     hidden var propFontSize as Number = 0;
     hidden var propShowClockBg as Boolean = true;
@@ -65,6 +67,7 @@ class Segment7View extends WatchUi.WatchFace {
         clockBg,
         clock,
         dataValue,
+        accent,
         battBg,
         battBar,
         battEmpty
@@ -87,6 +90,7 @@ class Segment7View extends WatchUi.WatchFace {
         if(screenHeight < 240) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment47) as WatchUi.FontResource;
             fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+            fontTopData = fontData;
             clockHeight = 47;
             clockWidth = 163;
             dataHeight = 13;
@@ -95,9 +99,15 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72Narrow) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                fontTopData = fontData;
                 dataHeight = 13;
+            } else if(propFontSize == 1) {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = fontData;
+                dataHeight = 20;
             } else {
                 fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
                 dataHeight = 20;
             }
             clockHeight = 72;
@@ -107,9 +117,15 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                fontTopData = fontData;
                 dataHeight = 13;
+            } else if(propFontSize == 1) {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = fontData;
+                dataHeight = 20;
             } else {
                 fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
                 dataHeight = 20;
             }
             clockHeight = 72;
@@ -119,9 +135,15 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                fontTopData = fontData;
                 dataHeight = 13;
+            } else if(propFontSize == 1) {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = fontData;
+                dataHeight = 20;
             } else {
                 fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
                 dataHeight = 20;
             }
             clockHeight = 100;
@@ -131,9 +153,15 @@ class Segment7View extends WatchUi.WatchFace {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                fontTopData = fontData;
                 dataHeight = 20;
+            } else if(propFontSize == 1) {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
+                fontTopData = fontData;
+                dataHeight = 27;
             } else {
                 fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
+                fontTopData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
                 dataHeight = 27;
             }
             clockHeight = 124;
@@ -224,25 +252,25 @@ class Segment7View extends WatchUi.WatchFace {
 
         // Draw Data fields
         drawTextWithPadding(dc,
-                            centerX, (centerY - halfClockHeight - marginY - dataHeight) / 2 - (dataHeight / 2),
-                            fontData, dataTopCenter, Graphics.TEXT_JUSTIFY_CENTER,
-                            themeColors[dataValue]);
+                            centerX, (centerY - halfClockHeight - marginY - dataHeight) / 2 - (dataHeight / 3),
+                            fontTopData, dataTopCenter, Graphics.TEXT_JUSTIFY_CENTER,
+                            getDataValueColor(1));
         drawTextWithPadding(dc,
                             centerX - halfClockWidth + textPadding, centerY - halfClockHeight - marginY - dataHeight,
                             fontData, dataTopLeft, Graphics.TEXT_JUSTIFY_LEFT,
-                            themeColors[dataValue]);
+                            getDataValueColor(2));
         drawTextWithPadding(dc,
                             centerX + halfClockWidth - textPadding, centerY - halfClockHeight - marginY - dataHeight,
                             fontData, dataTopRight, Graphics.TEXT_JUSTIFY_RIGHT,
-                            themeColors[dataValue]);
+                            getDataValueColor(3));
         drawTextWithPadding(dc,
                             centerX - halfClockWidth + textPadding, centerY + halfClockHeight + marginY,
                             fontData, dataBottomLeft, Graphics.TEXT_JUSTIFY_LEFT,
-                            themeColors[dataValue]);
+                            getDataValueColor(4));
         drawTextWithPadding(dc,
                             centerX + halfClockWidth - textPadding, centerY + halfClockHeight + marginY,
                             fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT,
-                            themeColors[dataValue]);
+                            getDataValueColor(5));
 
         // Draw battery bar
         drawBatteryBar(dc);
@@ -300,24 +328,46 @@ class Segment7View extends WatchUi.WatchFace {
 
     (:PaletteBase)
     hidden function setColorTheme() as Void {
-        //                                     background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
+        //                                     background pattern   clockBg   clock     dataValue accent    battBg   battBar   battEmpty
         if(canBurnIn) {
-            if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x222222, 0xFFFFFF, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000]; }
-            if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x222222, 0xfbcb77, 0xFFFFFF, 0x222222, 0x00FF00, 0xFF0000]; }
-            if(propTheme == 2) { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0x222222, 0x000000, 0x222222, 0x00FF00, 0xFF0000]; }
+            if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x333333, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White
+            if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x333333, 0xfbcb77, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Yellow
+            if(propTheme == 2) { themeColors = [0x000000, 0x254c2d, 0x152b19, 0x96e0ac, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
+            if(propTheme == 3) { themeColors = [0x000000, 0x007181, 0x074b56, 0x00efd1, 0xFFFFFF, 0x00efd1, 0x222222, 0x3fde65, 0xFF0000]; } // Blue
+            if(propTheme == 4) { themeColors = [0x000000, 0x555555, 0x333333, 0xdc2f43, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // Red
+            if(propTheme == 5) { themeColors = [0x000000, 0x304e81, 0x333333, 0xff9e4a, 0xFFFFFF, 0xff9e4a, 0x222222, 0x3fde65, 0xFF0000]; } // Orange
+            if(propTheme == 6) { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0x000000, 0x000000, 0xff5500, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Black on white
+            if(propTheme == 7) { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0xDD0000, 0x000000, 0xDD0000, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Red on white
         } else {
-            if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFFFF, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000]; }
-            if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFF00, 0xFFFFFF, 0x555555, 0x00FF00, 0xFF0000]; }
-            if(propTheme == 2) { themeColors = [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0x000000, 0x000000, 0x555555, 0x00FF00, 0xFF0000]; }
+            if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
+            if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
+            if(propTheme == 2) { themeColors = [0x000000, 0x555555, 0x005500, 0x00FF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Green
+            if(propTheme == 3) { themeColors = [0x000000, 0x555555, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Blue
+            if(propTheme == 4) { themeColors = [0x000000, 0x555555, 0x555555, 0xFF0000, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // Red
+            if(propTheme == 5) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFAA00, 0xFFFFFF, 0xFFAA00, 0x555555, 0x00FF00, 0xFF0000]; } // Orange
+            if(propTheme == 6) { themeColors = [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0x000000, 0x000000, 0xFF5500, 0xAAAAAA, 0x00FF00, 0xFF0000]; } // Black on white
+            if(propTheme == 7) { themeColors = [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0xAA0000, 0x000000, 0xAA0000, 0xAAAAAA, 0x00FF00, 0xFF0000]; } // Red on white
         }
     }
 
     (:Palette8)
     hidden function setColorTheme() as Void {
-        //                                 background pattern   clockBg   clock     dataValue  battBg   battBar   battEmpty
-        if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; }
-        if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; }
-        if(propTheme == 2) { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0x000000, 0x000000, 0x000000, 0x00FF00, 0xFF0000]; }
+        //                                 background pattern   clockBg   clock     dataValue accent    battBg   battBar   battEmpty
+        if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White
+        if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Yellow
+        if(propTheme == 2) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Green
+        if(propTheme == 3) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Blue
+        if(propTheme == 4) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Red
+        if(propTheme == 5) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFF00FF, 0xFFFFFF, 0xFF00FF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Orange
+        if(propTheme == 6) { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0x000000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Black on white
+        if(propTheme == 7) { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0xFF0000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Red on white
+    }
+
+    hidden function getDataValueColor(index as Number) {
+        if(propAccentColorOn == 0) { return themeColors[dataValue]; }
+        if(propAccentColorOn == index) { return themeColors[accent]; }
+        if(propAccentColorOn == 6 and (index == 4 or index == 5)) { return themeColors[accent]; }
+        return themeColors[dataValue]; 
     }
 
     hidden function updateProperties() as Void {
@@ -327,6 +377,7 @@ class Segment7View extends WatchUi.WatchFace {
         propFieldBottomLeft = Application.Properties.getValue("fieldBottomLeft") as Number;
         propFieldBottomRight = Application.Properties.getValue("fieldBottomRight") as Number;
         propTheme = Application.Properties.getValue("colorTheme") as Number;
+        propAccentColorOn = Application.Properties.getValue("accentColorOn") as Number;
         propBackgroundPattern = Application.Properties.getValue("backgroundPattern") as Number;
         propFontSize = Application.Properties.getValue("fontSize") as Number;
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
@@ -409,12 +460,12 @@ class Segment7View extends WatchUi.WatchFace {
         } else if(complicationType == 4) { // distance / day
             if(ActivityMonitor.getInfo() has :distance) {
                 if(ActivityMonitor.getInfo().distance != null) {
-                    var distance = ActivityMonitor.getInfo().distance / 100;
+                    var distance = ActivityMonitor.getInfo().distance / 100; // Convert cm to meter
                     val = valueAndUnit(formatDistance(distance), complicationType);
                 }
             }
         } else if(complicationType == 5) { // Weekly distance
-            var weekly_distance = getWeeklyDistance() / 100;
+            var weekly_distance = getWeeklyDistance() / 100; // Convert cm to meter
             val = valueAndUnit(formatDistance(weekly_distance), complicationType);
         } else if(complicationType == 6) { // Weekly run distance
             if (Toybox has :Complications) {
@@ -641,7 +692,22 @@ class Segment7View extends WatchUi.WatchFace {
             }
         } else if(complicationType == 42) { // Alt TZ 1
             val = secondaryTimezone(propTzOffset);
-        } 
+        } else if(complicationType == 43) { // Time of the next Calendar Event
+            if (Toybox has :Complications) {
+                try {
+                    var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_CALENDAR_EVENTS));
+                    if (complication != null && complication.value != null) {
+                        val = complication.value;
+                        var colon_index = val.find(":");
+                        if (colon_index != null && colon_index < 2) {
+                            val = "0" + val;
+                        }
+                    } else {
+                        val = "--:--";
+                    }
+                } catch(e) {}
+            }
+        }
 
         return val;
     }
