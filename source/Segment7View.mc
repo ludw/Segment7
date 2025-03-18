@@ -91,7 +91,19 @@ class Segment7View extends WatchUi.WatchFace {
             clockWidth = 163;
             dataHeight = 13;
             textPadding = 2;
-        } else if(screenHeight >= 240 and screenHeight <= 280) { // Note: 240 is squeezed
+        } else if(screenHeight == 240) {
+            fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72Narrow) as WatchUi.FontResource;
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                dataHeight = 13;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            }
+            clockHeight = 72;
+            clockWidth = 200;
+            textPadding = 3;
+        } else if(screenHeight > 240 and screenHeight <= 280) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
@@ -103,7 +115,7 @@ class Segment7View extends WatchUi.WatchFace {
             clockHeight = 72;
             clockWidth = 215;
             textPadding = 3;
-        } else if(screenHeight > 280 and screenHeight < 416) {
+        }else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
             if(propFontSize == 0) { 
                 fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
@@ -198,8 +210,8 @@ class Segment7View extends WatchUi.WatchFace {
 
         // Background pattern
         if(!isSleeping or !canBurnIn) {
-            if(propBackgroundPattern == 1) { drawPattern(dc, "0000000000", themeColors[pattern], 0); }
-            if(propBackgroundPattern == 2) { drawPattern(dc, "2222222222", themeColors[pattern], 0); }
+            if(propBackgroundPattern == 1) { drawPattern(dc, "0", themeColors[pattern], 0); }
+            if(propBackgroundPattern == 2) { drawPattern(dc, "2", themeColors[pattern], 0); }
         }
 
         // Draw Clock
@@ -237,7 +249,7 @@ class Segment7View extends WatchUi.WatchFace {
 
         // AOD burn in prevention pattern
         if(isSleeping and canBurnIn) {
-            drawPattern(dc, "1111111111", 0x000000, now.min % 2);
+            drawPattern(dc, "1", 0x000000, now.min % 2);
         }
     }
 
@@ -273,10 +285,15 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
+        var text = "";
+        for(var i = 0; i < Math.ceil(screenWidth / 48) + 1; i++) {
+            text += pattern;
+        }
+
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         var i = 0;
         while(i < Math.ceil(screenHeight / 48) + 1) {
-            dc.drawText(0, i*48 + offset, fontPatterns, pattern, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(0, i*48 + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
     }
@@ -334,7 +351,7 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function getClockData(now as Gregorian.Info) as String {
-         return Lang.format("$1$:$2$", [formatHour(now.hour), now.min.format("%02d")]);
+         return Lang.format("$1$:$2$", [formatHour(now.hour).format("%02d"), now.min.format("%02d")]);
     }
 
     hidden function formatHour(hour as Number) as Number {
@@ -392,13 +409,13 @@ class Segment7View extends WatchUi.WatchFace {
         } else if(complicationType == 4) { // distance / day
             if(ActivityMonitor.getInfo() has :distance) {
                 if(ActivityMonitor.getInfo().distance != null) {
-                    var distance = ActivityMonitor.getInfo().distance;
+                    var distance = ActivityMonitor.getInfo().distance / 100;
                     val = valueAndUnit(formatDistance(distance), complicationType);
                 }
             }
         } else if(complicationType == 5) { // Weekly distance
-            var weekly_distance = getWeeklyDistance();
-            val = formatDistance(weekly_distance);
+            var weekly_distance = getWeeklyDistance() / 100;
+            val = valueAndUnit(formatDistance(weekly_distance), complicationType);
         } else if(complicationType == 6) { // Weekly run distance
             if (Toybox has :Complications) {
                 try {
@@ -750,9 +767,9 @@ class Segment7View extends WatchUi.WatchFace {
         var distance_units = System.getDeviceSettings().distanceUnits;
         var distance;
         if((propUnits == 0 and distance_units == System.UNIT_METRIC) or propUnits == 1) {
-            distance = meters / 100000.0;
+            distance = meters / 1000.0;
         } else {
-            distance = meters / 160900.0;
+            distance = meters / 1609.0;
         }
         return distance < 10 ? distance.format("%.1f") : distance.format("%d");
     }
@@ -931,7 +948,7 @@ class Segment7View extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = Lang.format("$1$$2$/$3$$2$", [high.format("%02d"), tempUnit, low.format("%02d")]);
+                ret = Lang.format("$1$$2$/$3$$2$", [high.format("%d"), tempUnit, low.format("%d")]);
             }
         }
         return ret;

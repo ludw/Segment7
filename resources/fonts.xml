@@ -1,6 +1,7 @@
 <fonts>
   <font id="SevenSegment47" filename="fonts/7segment47.fnt" antialias="true" />
   <font id="SevenSegment72" filename="fonts/7segment72.fnt" antialias="true" />
+  <font id="SevenSegment72Narrow" filename="fonts/7segment72narrow.fnt" antialias="true" />
   <font id="SevenSegment100" filename="fonts/7segment100.fnt" antialias="true" />
   <font id="SevenSegment124" filename="fonts/7segment124.fnt" antialias="true" />
   <font id="LedLines" filename="fonts/led_lines.fnt" antialias="true" />
