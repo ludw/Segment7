@@ -10,6 +10,7 @@
     <property id="accentColorOn" type="number">0</property>
     <property id="backgroundPattern" type="number">1</property>
     <property id="fontSize" type="number">2</property>
+    <property id="zeroPadHour" type="boolean">true</property>
     <property id="showClockBg" type="boolean">true</property>
     
     <property id="hourFormat" type="number">0</property>

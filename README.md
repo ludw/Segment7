@@ -23,3 +23,5 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 ## Change log
 
+2025-03-19 v1.2.0
+- Option for zero padding hours

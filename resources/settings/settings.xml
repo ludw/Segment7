@@ -289,6 +289,10 @@
     <setting propertyKey="@Properties.showClockBg" title="Show clock background">
         <settingConfig type="boolean" />
     </setting>
+    
+    <setting propertyKey="@Properties.zeroPadHour" title="Zero pad hours">
+        <settingConfig type="boolean" />
+    </setting>
 
     <setting propertyKey="@Properties.hourFormat" title="Time format (12/24h)">
         <settingConfig type="list">

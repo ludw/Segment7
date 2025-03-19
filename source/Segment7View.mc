@@ -52,6 +52,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propBackgroundPattern as Number = 0;
     hidden var propFontSize as Number = 0;
     hidden var propShowClockBg as Boolean = true;
+    hidden var propZeropadHour as Boolean = true;
 
     hidden var propHourFormat as Number = 0;
     hidden var propDateFormat as Number = 0;
@@ -341,7 +342,7 @@ class Segment7View extends WatchUi.WatchFace {
         } else {
             if(propTheme == 0) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
             if(propTheme == 1) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
-            if(propTheme == 2) { themeColors = [0x000000, 0x555555, 0x005500, 0x00FF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Green
+            if(propTheme == 2) { themeColors = [0x000000, 0x555555, 0x005500, 0x00FF00, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // Green
             if(propTheme == 3) { themeColors = [0x000000, 0x555555, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Blue
             if(propTheme == 4) { themeColors = [0x000000, 0x555555, 0x555555, 0xFF0000, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // Red
             if(propTheme == 5) { themeColors = [0x000000, 0x555555, 0x555555, 0xFFAA00, 0xFFFFFF, 0xFFAA00, 0x555555, 0x00FF00, 0xFF0000]; } // Orange
@@ -381,6 +382,7 @@ class Segment7View extends WatchUi.WatchFace {
         propBackgroundPattern = Application.Properties.getValue("backgroundPattern") as Number;
         propFontSize = Application.Properties.getValue("fontSize") as Number;
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
+        propZeropadHour = Application.Properties.getValue("zeroPadHour") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;
         propShowUnits = Application.Properties.getValue("showUnits") as Boolean;
@@ -402,7 +404,11 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function getClockData(now as Gregorian.Info) as String {
-         return Lang.format("$1$:$2$", [formatHour(now.hour).format("%02d"), now.min.format("%02d")]);
+        if(propZeropadHour) {
+            return Lang.format("$1$:$2$", [formatHour(now.hour).format("%02d"), now.min.format("%02d")]);
+        } else {
+            return Lang.format("$1$:$2$", [formatHour(now.hour).format("%2d"), now.min.format("%02d")]);
+        }
     }
 
     hidden function formatHour(hour as Number) as Number {
