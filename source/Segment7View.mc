@@ -88,86 +88,59 @@ class Segment7View extends WatchUi.WatchFace {
         screenHeight = Toybox.System.getDeviceSettings().screenHeight;
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
 
+        // Load clock font
         if(screenHeight < 240) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment47) as WatchUi.FontResource;
-            fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-            fontTopData = fontData;
             clockHeight = 47;
             clockWidth = 163;
-            dataHeight = 13;
             textPadding = 2;
         } else if(screenHeight == 240) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72Narrow) as WatchUi.FontResource;
-            if(propFontSize == 0) { 
-                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 13;
-            } else if(propFontSize == 1) {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 20;
-            } else {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                dataHeight = 20;
-            }
             clockHeight = 72;
             clockWidth = 200;
             textPadding = 3;
         } else if(screenHeight > 240 and screenHeight <= 280) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
-            if(propFontSize == 0) { 
-                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 13;
-            } else if(propFontSize == 1) {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 20;
-            } else {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                dataHeight = 20;
-            }
             clockHeight = 72;
             clockWidth = 215;
             textPadding = 3;
         }else if(screenHeight > 280 and screenHeight < 416) {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
-            if(propFontSize == 0) { 
-                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 13;
-            } else if(propFontSize == 1) {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 20;
-            } else {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
-                dataHeight = 20;
-            }
             clockHeight = 100;
             clockWidth = 308;
             textPadding = 4;
         } else {
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
-            if(propFontSize == 0) { 
-                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 20;
-            } else if(propFontSize == 1) {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
-                fontTopData = fontData;
-                dataHeight = 27;
-            } else {
-                fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
-                fontTopData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
-                dataHeight = 27;
-            }
             clockHeight = 124;
             clockWidth = 372;
             textPadding = 6;
+        }
+
+        // Load data font
+        if(screenHeight < 240) {
+            fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+            fontTopData = fontData;
+            dataHeight = 13;
+        } else if(screenHeight >= 240 and screenHeight < 416) {
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource;
+                dataHeight = 13;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            } 
+            fontTopData = fontData;
+            if(propFontSize == 2) { fontTopData = WatchUi.loadResource(Rez.Fonts.LedSmall) as WatchUi.FontResource; }
+        } else {
+            if(propFontSize == 0) { 
+                fontData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource;
+                dataHeight = 20;
+            } else {
+                fontData = WatchUi.loadResource(Rez.Fonts.LedBig) as WatchUi.FontResource;
+                dataHeight = 27;
+            }
+            fontTopData = fontData;
+            if(propFontSize == 2) { fontTopData = WatchUi.loadResource(Rez.Fonts.LedLines) as WatchUi.FontResource; }
         }
 
         centerX = Math.round(screenWidth / 2);

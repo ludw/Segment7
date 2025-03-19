@@ -16,10 +16,17 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 ## Buy me a coffee (if you want to)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M51A1RGV)
 
+## Contributing guidelines
+- **Open an issue first and discuss what you want to contribute**
+- Keep PRs small, don't do a lot of different changes at once.
+- Explain what you have changed and why.
+- Only submit code you have actually run and tested (on all supported screen sizes).
+- Remeber that watch faces has to be performant and memory efficient. Changes that significantly increase memory use or degrade performance will be rejected.
+- For optimizations, please provide memory and profiler comparisons.
+- Try to keep the code in the same style as the rest of the project.
 
  ## TODO
 - Icons
-
 
 ## Change log
 
