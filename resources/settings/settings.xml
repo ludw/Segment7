@@ -250,11 +250,14 @@
             <listEntry value="0">White on Black</listEntry>
             <listEntry value="1">Yellow on Black</listEntry>
             <listEntry value="2">Green on Black</listEntry>
-            <listEntry value="3">Blue on Black</listEntry>
+            <listEntry value="3">Turquoise on Black</listEntry>
+            <listEntry value="10">Blue on Black</listEntry>
             <listEntry value="4">Red on Black</listEntry>
             <listEntry value="5">Orange on Black</listEntry>
             <listEntry value="6">Black on White (No AOD with this theme)</listEntry>
             <listEntry value="7">Red on White (No AOD with this theme)</listEntry>
+            <listEntry value="8">White on Red</listEntry>
+            <listEntry value="9">White on Turquoise</listEntry>
         </settingConfig>
     </setting>
 
