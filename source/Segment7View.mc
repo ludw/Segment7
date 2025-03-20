@@ -709,7 +709,7 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function getUnit(complicationType as Number) as String {
         var unit = "";
-        if(complicationType == 21 or complicationType == 22) {
+        if(complicationType == 25 or complicationType == 26) {
             unit = "KCAL";
         } else if(complicationType == 4 or complicationType == 5 or complicationType == 6 or complicationType == 7) {
             if(propUnits == 1 or (propUnits == 0 and System.getDeviceSettings().distanceUnits == System.UNIT_METRIC) ) {
@@ -717,11 +717,11 @@ class Segment7View extends WatchUi.WatchFace {
             } else {
                 unit = "MI";
             }
-        } else if(complicationType == 16) {
-            unit = "M";
-        } else if(complicationType == 17) {
-            unit = "FT";
         } else if(complicationType == 20) {
+            unit = "M";
+        } else if(complicationType == 21) {
+            unit = "FT";
+        } else if(complicationType == 24) {
             if(propUnits == 1 or (propUnits == 0 and System.getDeviceSettings().weightUnits == System.UNIT_METRIC) ) {
                 unit = "KG";
             } else {
