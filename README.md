@@ -33,6 +33,7 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 2025-03-20 v1.3.1
 - Fixed bug with units
+- Fixed bug with battery bar on two color themes
 
 2025-03-19 v1.3.0
 - Option for zero padding hours
