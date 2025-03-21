@@ -1,0 +1,11 @@
+info face="Patterns" size=96 bold=0 italic=0 smooth=1 spacing=1,1
+common lineHeight=192 base=96 scaleW=101 scaleH=96 pages=1
+page id=0 file="patterns_2x.png"
+chars count=2
+
+char id=48 x=0 y=0 width=96 height=96 xoffset=0 yoffset=2 xadvance=96 page=0
+char id=49 x=96 y=0 width=96 height=96 xoffset=0 yoffset=0 xadvance=96 page=0
+char id=50 x=196 y=0 width=96 height=96 xoffset=0 yoffset=0 xadvance=96 page=0
+char id=51 x=292 y=0 width=96 height=96 xoffset=0 yoffset=0 xadvance=96 page=0
+char id=52 x=388 y=0 width=192 height=192 xoffset=0 yoffset=0 xadvance=192 page=0
+char id=53 x=580 y=0 width=192 height=192 xoffset=0 yoffset=0 xadvance=192 page=0

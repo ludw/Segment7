@@ -1,0 +1,17 @@
+info face="7segment100w" size=100 bold=0 italic=0 smooth=1 spacing=2,2
+common lineHeight=100 base=100 scaleW=462 scaleH=100 pages=1
+page id=0 file="7segment.png"
+chars count=1
+char id=32 x=0 y=471 width=0 height=100 xoffset=0 yoffset=0 xadvance=66 page=0
+char id=35 x=0 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=49 x=58 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=50 x=116 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=51 x=174 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=52 x=232 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=53 x=290 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=54 x=348 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=55 x=406 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=56 x=464 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=57 x=522 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=48 x=580 y=471 width=58 height=100 xoffset=4 yoffset=0 xadvance=66 page=0
+char id=58 x=638 y=471 width=36 height=100 xoffset=4 yoffset=0 xadvance=44 page=0
