@@ -258,6 +258,7 @@
             <listEntry value="7">Red on White (No AOD with this theme)</listEntry>
             <listEntry value="8">White on Red</listEntry>
             <listEntry value="9">White on Turquoise</listEntry>
+            <listEntry value="11">White on Green</listEntry>
         </settingConfig>
     </setting>
 
@@ -278,6 +279,8 @@
             <listEntry value="0">None</listEntry>
             <listEntry value="1">Dots</listEntry>
             <listEntry value="2">Lines</listEntry>
+            <listEntry value="3">Sparse dots</listEntry>
+            <listEntry value="4">Pixel Camo</listEntry>
         </settingConfig>
     </setting>
 

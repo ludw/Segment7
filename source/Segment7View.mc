@@ -214,6 +214,8 @@ class Segment7View extends WatchUi.WatchFace {
         if(!isSleeping or !canBurnIn) {
             if(propBackgroundPattern == 1) { drawPattern(dc, "0", themeColors[pattern], 0); }
             if(propBackgroundPattern == 2) { drawPattern(dc, "2", themeColors[pattern], 0); }
+            if(propBackgroundPattern == 3) { drawPattern(dc, "3", themeColors[pattern], 0); }
+            if(propBackgroundPattern == 4) { drawCamoPattern(dc, "4", themeColors[pattern], 0); }
         }
 
         // Draw Clock
@@ -289,12 +291,33 @@ class Segment7View extends WatchUi.WatchFace {
     hidden function drawPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
         var text = "";
         for(var i = 0; i < Math.ceil(screenWidth / 48) + 1; i++) {
-            text += pattern;
+                text += pattern;
         }
 
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         var i = 0;
         while(i < Math.ceil(screenHeight / 48) + 1) {
+            dc.drawText(0, i*48 + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
+            i++;
+        }
+    }
+
+    hidden function drawCamoPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
+        var text = "";
+        var i = 0;
+        var j = 0;
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        while(i < Math.ceil(screenHeight / 48) + 1) {
+            text = "";
+            
+            for(j = 0; j < Math.ceil(screenWidth / 48) + 1; j++) {
+                System.println(j+i);
+                if((j+i) % 3 == 0 or (j+i) % 7 == 0) {
+                    text += "5";
+                } else {
+                    text += pattern;
+                }
+            }
             dc.drawText(0, i*48 + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
@@ -310,23 +333,25 @@ class Segment7View extends WatchUi.WatchFace {
             if(propTheme == 3)  { themeColors = [0x000000, 0x007181, 0x074b56, 0x00efd1, 0xFFFFFF, 0x00efd1, 0x222222, 0x3fde65, 0xFF0000]; } // Turquoise
             if(propTheme == 10) { themeColors = [0x000000, 0x005b9d, 0x003d69, 0x00d1f7, 0xFFFFFF, 0x00d1f7, 0x222222, 0x3fde65, 0xFF0000]; } // Blue
             if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0x333333, 0xdc2f43, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // Red
-            if(propTheme == 5)  { themeColors = [0x000000, 0x304e81, 0x333333, 0xff9e4a, 0xFFFFFF, 0xff9e4a, 0x222222, 0x3fde65, 0xFF0000]; } // Orange
+            if(propTheme == 5)  { themeColors = [0x000000, 0x816b5e, 0x333333, 0xff9e4a, 0xFFFFFF, 0xff9e4a, 0x222222, 0x3fde65, 0xFF0000]; } // Orange
             if(propTheme == 6)  { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0x000000, 0x000000, 0xff5500, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Black on white
             if(propTheme == 7)  { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0xDD0000, 0x000000, 0xDD0000, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Red on white
             if(propTheme == 8)  { themeColors = [0x000000, 0xAA0000, 0x550000, 0xFFFFFF, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // White on Red
             if(propTheme == 9)  { themeColors = [0x000000, 0x007181, 0x024a56, 0xFFFFFF, 0xFFFFFF, 0x00eae7, 0x222222, 0x3fde65, 0xFF0000]; } // White on Turquoise
+            if(propTheme == 11) { themeColors = [0x000000, 0x254c2d, 0x152b19, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White on Green
         } else { 
-            if(propTheme == 0)  { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
-            if(propTheme == 1)  { themeColors = [0x000000, 0x555555, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
-            if(propTheme == 2)  { themeColors = [0x000000, 0x555555, 0x005500, 0x00FF00, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // Green
-            if(propTheme == 3)  { themeColors = [0x000000, 0x555555, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Turquoise
-            if(propTheme == 10) { themeColors = [0x000000, 0x555555, 0x555555, 0x0000AA, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Blue
-            if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0x555555, 0xFF0000, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // Red
-            if(propTheme == 5)  { themeColors = [0x000000, 0x555555, 0x555555, 0xFFAA00, 0xFFFFFF, 0xFFAA00, 0x555555, 0x00FF00, 0xFF0000]; } // Orange
+            if(propTheme == 0)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
+            if(propTheme == 1)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
+            if(propTheme == 2)  { themeColors = [0x000000, 0x55AA55, 0x005500, 0x00FF00, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // Green
+            if(propTheme == 3)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Turquoise
+            if(propTheme == 10) { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0x0000AA, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Blue
+            if(propTheme == 4)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFF0000, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // Red
+            if(propTheme == 5)  { themeColors = [0x000000, 0xAA5500, 0x555555, 0xFFAA00, 0xFFFFFF, 0xFFAA00, 0x555555, 0x00FF00, 0xFF0000]; } // Orange
             if(propTheme == 6)  { themeColors = [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0x000000, 0x000000, 0xFF5500, 0xAAAAAA, 0x00FF00, 0xFF0000]; } // Black on white
             if(propTheme == 7)  { themeColors = [0xFFFFFF, 0xAAAAAA, 0xAAAAAA, 0xAA0000, 0x000000, 0xAA0000, 0xAAAAAA, 0x00FF00, 0xFF0000]; } // Red on white
             if(propTheme == 8)  { themeColors = [0x000000, 0xAA0000, 0xAA0000, 0xFFFFFF, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // White on Red
             if(propTheme == 9)  { themeColors = [0x000000, 0x00AAAA, 0x005555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White on Turquoise
+            if(propTheme == 11) { themeColors = [0x000000, 0x55AA55, 0x55AA55, 0xFFFFFF, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // White on Green
         }
     }
 
@@ -340,10 +365,11 @@ class Segment7View extends WatchUi.WatchFace {
         if(propTheme == 10) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x0000FF, 0xFFFFFF, 0x0000FF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Blue
         if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Red
         if(propTheme == 5)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFF00FF, 0xFFFFFF, 0xFF00FF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Orange
-        if(propTheme == 6)  { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0x000000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Black on white
-        if(propTheme == 7)  { themeColors = [0xFFFFFF, 0xAAAAAA, 0x000000, 0xFF0000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Red on white
-        if(propTheme == 8)  { themeColors = [0x000000, 0x555555, 0xFF0000, 0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White on Red
-        if(propTheme == 9)  { themeColors = [0x000000, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White on Turquoise
+        if(propTheme == 6)  { themeColors = [0xFFFFFF, 0x000000, 0x000000, 0x000000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Black on white
+        if(propTheme == 7)  { themeColors = [0xFFFFFF, 0x000000, 0x000000, 0xFF0000, 0x000000, 0xFF0000, 0x000000, 0x00FF00, 0xFF0000]; } // Red on white
+        if(propTheme == 8)  { themeColors = [0x000000, 0xFF0000, 0xFF0000, 0xFFFFFF, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White on Red
+        if(propTheme == 9)  { themeColors = [0x000000, 0x00FFFF, 0x00FFFF, 0xFFFFFF, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White on Turquoise
+        if(propTheme == 11) { themeColors = [0x000000, 0x00FF00, 0x00FF00, 0xFFFFFF, 0xFFFFFF, 0x00FF00, 0x555555, 0x00FF00, 0xFF0000]; } // White on Green
     }
 
     hidden function getDataValueColor(index as Number) {

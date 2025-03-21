@@ -4,5 +4,8 @@ page id=0 file="patterns.png"
 chars count=2
 
 char id=48 x=0 y=0 width=48 height=48 xoffset=0 yoffset=2 xadvance=48 page=0
-char id=49 x=51 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
-char id=50 x=101 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
+char id=49 x=48 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
+char id=50 x=98 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
+char id=51 x=146 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
+char id=52 x=194 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
+char id=53 x=242 y=0 width=48 height=48 xoffset=0 yoffset=0 xadvance=48 page=0
