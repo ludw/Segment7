@@ -4,8 +4,11 @@
   <font id="SevenSegment72Narrow" filename="fonts/7segment72narrow.fnt" antialias="true" />
   <font id="SevenSegment100" filename="fonts/7segment100.fnt" antialias="true" />
   <font id="SevenSegment124" filename="fonts/7segment124.fnt" antialias="true" />
+  <font id="SevenSegment100w" filename="fonts/7segment100w.fnt" antialias="true" />
+  <font id="SevenSegment124w" filename="fonts/7segment124w.fnt" antialias="true" />
   <font id="LedLines" filename="fonts/led_lines.fnt" antialias="true" />
   <font id="LedBig" filename="fonts/led_big.fnt" antialias="true" />
   <font id="LedSmall" filename="fonts/led_small.fnt" antialias="true" />
   <font id="Patterns" filename="fonts/patterns.fnt" antialias="true" />
+  <font id="Patterns2x" filename="fonts/patterns2x.fnt" antialias="true" />
 </fonts>

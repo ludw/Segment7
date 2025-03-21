@@ -14,6 +14,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var clockHeight as Number;
     hidden var clockWidth as Number;
     hidden var dataHeight as Number;
+    hidden var patternHeight as Number;
     hidden var textPadding as Number;
     hidden var centerX as Number;
     hidden var centerY as Number;
@@ -52,6 +53,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propBackgroundPattern as Number = 0;
     hidden var propFontSize as Number = 0;
     hidden var propShowClockBg as Boolean = true;
+    hidden var propShowClockGradient as Boolean = true;
     hidden var propZeropadHour as Boolean = true;
 
     hidden var propHourFormat as Number = 0;
@@ -90,30 +92,42 @@ class Segment7View extends WatchUi.WatchFace {
 
         // Load clock font
         if(screenHeight < 240) {
+            fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment47) as WatchUi.FontResource;
             clockHeight = 47;
             clockWidth = 163;
             textPadding = 2;
+            patternHeight = 48;
         } else if(screenHeight == 240) {
+            fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72Narrow) as WatchUi.FontResource;
             clockHeight = 72;
             clockWidth = 200;
             textPadding = 3;
+            patternHeight = 48;
         } else if(screenHeight > 240 and screenHeight <= 280) {
+            fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
             fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment72) as WatchUi.FontResource;
             clockHeight = 72;
             clockWidth = 215;
             textPadding = 3;
+            patternHeight = 48;
         }else if(screenHeight > 280 and screenHeight < 416) {
-            fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource;
+            fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns2x) as WatchUi.FontResource;
+            if(propShowClockGradient) { fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100) as WatchUi.FontResource; }
+            else { fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment100w) as WatchUi.FontResource; }
             clockHeight = 100;
             clockWidth = 308;
             textPadding = 4;
+            patternHeight = 96;
         } else {
-            fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource;
+            fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns2x) as WatchUi.FontResource;
+            if(propShowClockGradient) { fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124) as WatchUi.FontResource; }
+            else { fontClock = WatchUi.loadResource(Rez.Fonts.SevenSegment124w) as WatchUi.FontResource; }
             clockHeight = 124;
             clockWidth = 372;
             textPadding = 6;
+            patternHeight = 96;
         }
 
         // Load data font
@@ -148,7 +162,6 @@ class Segment7View extends WatchUi.WatchFace {
         marginY = Math.round(screenHeight / 25);
         halfClockHeight = Math.round(clockHeight / 2);
         halfClockWidth = Math.round(clockWidth / 2);
-        fontPatterns = WatchUi.loadResource(Rez.Fonts.Patterns) as WatchUi.FontResource;
 
         updateWeather();
     }
@@ -200,7 +213,7 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     function onSettingsChanged() as Void {
-        updateProperties();
+        initialize();
         forceUpdate = true;
         WatchUi.requestUpdate();
     }
@@ -290,14 +303,14 @@ class Segment7View extends WatchUi.WatchFace {
 
     hidden function drawPattern(dc as Dc, pattern as String, color as ColorType, offset as Number) as Void {
         var text = "";
-        for(var i = 0; i < Math.ceil(screenWidth / 48) + 1; i++) {
+        for(var i = 0; i < Math.ceil(screenWidth / patternHeight) + 1; i++) {
                 text += pattern;
         }
 
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         var i = 0;
-        while(i < Math.ceil(screenHeight / 48) + 1) {
-            dc.drawText(0, i*48 + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
+        while(i < Math.ceil(screenHeight / patternHeight) + 1) {
+            dc.drawText(0, i*patternHeight + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
     }
@@ -307,18 +320,17 @@ class Segment7View extends WatchUi.WatchFace {
         var i = 0;
         var j = 0;
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        while(i < Math.ceil(screenHeight / 48) + 1) {
+        while(i < Math.ceil(screenHeight / (patternHeight * 2)) + 1) {
             text = "";
             
-            for(j = 0; j < Math.ceil(screenWidth / 48) + 1; j++) {
-                System.println(j+i);
+            for(j = 0; j < Math.ceil(screenWidth / (patternHeight * 2)) + 1; j++) {
                 if((j+i) % 3 == 0 or (j+i) % 7 == 0) {
                     text += "5";
                 } else {
                     text += pattern;
                 }
             }
-            dc.drawText(0, i*48 + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(0, i * (patternHeight * 2) + offset, fontPatterns, text, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
     }
@@ -329,7 +341,7 @@ class Segment7View extends WatchUi.WatchFace {
         if(canBurnIn) {
             if(propTheme == 0)  { themeColors = [0x000000, 0x555555, 0x333333, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White
             if(propTheme == 1)  { themeColors = [0x000000, 0x555555, 0x333333, 0xfbcb77, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Yellow
-            if(propTheme == 2)  { themeColors = [0x000000, 0x254c2d, 0x152b19, 0x8fe09e, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
+            if(propTheme == 2)  { themeColors = [0x000000, 0x4b5535, 0x244b2e, 0x3fde65, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
             if(propTheme == 3)  { themeColors = [0x000000, 0x007181, 0x074b56, 0x00efd1, 0xFFFFFF, 0x00efd1, 0x222222, 0x3fde65, 0xFF0000]; } // Turquoise
             if(propTheme == 10) { themeColors = [0x000000, 0x005b9d, 0x003d69, 0x00d1f7, 0xFFFFFF, 0x00d1f7, 0x222222, 0x3fde65, 0xFF0000]; } // Blue
             if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0x333333, 0xdc2f43, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // Red
@@ -338,7 +350,7 @@ class Segment7View extends WatchUi.WatchFace {
             if(propTheme == 7)  { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0xDD0000, 0x000000, 0xDD0000, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Red on white
             if(propTheme == 8)  { themeColors = [0x000000, 0xAA0000, 0x550000, 0xFFFFFF, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // White on Red
             if(propTheme == 9)  { themeColors = [0x000000, 0x007181, 0x024a56, 0xFFFFFF, 0xFFFFFF, 0x00eae7, 0x222222, 0x3fde65, 0xFF0000]; } // White on Turquoise
-            if(propTheme == 11) { themeColors = [0x000000, 0x254c2d, 0x152b19, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White on Green
+            if(propTheme == 11) { themeColors = [0x000000, 0x6d876f, 0x152b19, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White on Green
         } else { 
             if(propTheme == 0)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
             if(propTheme == 1)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
@@ -390,6 +402,7 @@ class Segment7View extends WatchUi.WatchFace {
         propBackgroundPattern = Application.Properties.getValue("backgroundPattern") as Number;
         propFontSize = Application.Properties.getValue("fontSize") as Number;
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
+        propShowClockGradient = Application.Properties.getValue("showClockGradient") as Boolean;
         propZeropadHour = Application.Properties.getValue("zeroPadHour") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;

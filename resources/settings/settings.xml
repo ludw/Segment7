@@ -296,6 +296,10 @@
         <settingConfig type="boolean" />
     </setting>
     
+    <setting propertyKey="@Properties.showClockGradient" title="Gradient in clock numbers (AMOLED only)">
+        <settingConfig type="boolean" />
+    </setting>
+
     <setting propertyKey="@Properties.zeroPadHour" title="Zero pad hours">
         <settingConfig type="boolean" />
     </setting>

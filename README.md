@@ -30,6 +30,10 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 
 ## Change log
+2025-03-21 v1.4.1
+- Updated camo pattern
+- Option for gradient in clock on AMOLED screens
+
 2025-03-21 v1.4.0
 - New background patterns: Sparse dots and Pixel camo
 - New color theme: white on green
