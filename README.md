@@ -1,4 +1,4 @@
-# Segment34 MkII
+# Segment7
 Simple and efficient retro digital watch face with a 7 segment clock.
 
 - 7 color themes to choose from, including 2 with white background
@@ -30,11 +30,12 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 
 ## Change log
-
-2025-03-20 v1.3.1
+2025-03-21 v1.4.0
+- New background patterns: Sparse dots and Pixel camo
+- New color theme: white on green
 - Fixed bug with units
 - Fixed bug with battery bar on two color themes
 
-2025-03-19 v1.3.0
+2025-03-19 v1.3.1
 - Option for zero padding hours
 - Three new color themes (white on red, white on turquoise and blue on black)
