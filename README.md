@@ -30,7 +30,11 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 
 ## Change log
-2025-03-21 v1.4.1
+2025-03-21 v1.5.0
+- Option to show seconds in bottom right field
+- Option to show seconds also in inactive mode on MIP screens
+
+2025-03-21 v1.4.2
 - Updated camo pattern
 - Option for gradient in clock on AMOLED screens
 

@@ -198,6 +198,7 @@
     <setting propertyKey="@Properties.fieldBottomRight" title="Bottom Right field:">
         <settingConfig type="list">
             <listEntry value="-2">Hidden</listEntry>
+            <listEntry value="-1">Seconds</listEntry>
             <listEntry value="1">Date</listEntry>
             <listEntry value="2">Active min / week</listEntry>
             <listEntry value="3">Active min / day</listEntry>
@@ -301,6 +302,10 @@
     </setting>
 
     <setting propertyKey="@Properties.zeroPadHour" title="Zero pad hours">
+        <settingConfig type="boolean" />
+    </setting>
+
+    <setting propertyKey="@Properties.alwaysShowSeconds" title="Always display seconds (MIP only)">  
         <settingConfig type="boolean" />
     </setting>
 

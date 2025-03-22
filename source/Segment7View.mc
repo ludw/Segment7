@@ -39,6 +39,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
     hidden var forceUpdate as Boolean = true;
+    hidden var doesPartialUpdate as Boolean = false;
 
     hidden var weatherCondition as CurrentConditions?;
 
@@ -55,6 +56,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propShowClockBg as Boolean = true;
     hidden var propShowClockGradient as Boolean = true;
     hidden var propZeropadHour as Boolean = true;
+    hidden var propAlwaysShowSeconds as Boolean = false;
 
     hidden var propHourFormat as Number = 0;
     hidden var propDateFormat as Number = 0;
@@ -180,6 +182,11 @@ class Segment7View extends WatchUi.WatchFace {
     function onUpdate(dc as Dc) as Void {
         var now = Time.Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
 
+        if(doesPartialUpdate) {
+            dc.clearClip();
+            doesPartialUpdate = false;
+        }
+
         if(now.sec % 60 == 0 or forceUpdate) {
             forceUpdate = false;
             updateData(now);
@@ -218,6 +225,26 @@ class Segment7View extends WatchUi.WatchFace {
         WatchUi.requestUpdate();
     }
 
+    function onPartialUpdate(dc) {
+        if(canBurnIn) { return; }
+        if(!propAlwaysShowSeconds or propFieldBottomRight != -1) { return; }
+        doesPartialUpdate = true;
+
+        var now = Time.Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+        updateSeconds(now);
+
+        var x = centerX + halfClockWidth - textPadding;
+        var y = centerY + halfClockHeight + marginY;
+        var text_dim = dc.getTextDimensions(dataBottomRight, fontData) as [Lang.Number, Lang.Number];
+        var color = getDataValueColor(5);
+
+        dc.setClip(x - text_dim[0], y, text_dim[0], text_dim[1]);
+        dc.setColor(themeColors[background], themeColors[background]);
+        dc.clear();
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x, y, fontData, dataBottomRight, Graphics.TEXT_JUSTIFY_RIGHT);
+    }
+
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info) as Void {
         // Clear
         dc.setColor(themeColors[background], themeColors[background]);
@@ -238,6 +265,8 @@ class Segment7View extends WatchUi.WatchFace {
         }
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.drawText(centerX, centerY, fontClock, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        if(propFieldBottomRight == -1) { updateSeconds(now); }
 
         // Draw Data fields
         drawTextWithPadding(dc,
@@ -341,7 +370,7 @@ class Segment7View extends WatchUi.WatchFace {
         if(canBurnIn) {
             if(propTheme == 0)  { themeColors = [0x000000, 0x555555, 0x333333, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White
             if(propTheme == 1)  { themeColors = [0x000000, 0x555555, 0x333333, 0xfbcb77, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Yellow
-            if(propTheme == 2)  { themeColors = [0x000000, 0x4b5535, 0x244b2e, 0x3fde65, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
+            if(propTheme == 2)  { themeColors = [0x000000, 0x6e7158, 0x244b2e, 0x3fde65, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
             if(propTheme == 3)  { themeColors = [0x000000, 0x007181, 0x074b56, 0x00efd1, 0xFFFFFF, 0x00efd1, 0x222222, 0x3fde65, 0xFF0000]; } // Turquoise
             if(propTheme == 10) { themeColors = [0x000000, 0x005b9d, 0x003d69, 0x00d1f7, 0xFFFFFF, 0x00d1f7, 0x222222, 0x3fde65, 0xFF0000]; } // Blue
             if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0x333333, 0xdc2f43, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // Red
@@ -350,11 +379,11 @@ class Segment7View extends WatchUi.WatchFace {
             if(propTheme == 7)  { themeColors = [0xEEEEEE, 0xAAAAAA, 0xCCCCCC, 0xDD0000, 0x000000, 0xDD0000, 0xAAAAAA, 0x3fde65, 0xFF0000]; } // Red on white
             if(propTheme == 8)  { themeColors = [0x000000, 0xAA0000, 0x550000, 0xFFFFFF, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // White on Red
             if(propTheme == 9)  { themeColors = [0x000000, 0x007181, 0x024a56, 0xFFFFFF, 0xFFFFFF, 0x00eae7, 0x222222, 0x3fde65, 0xFF0000]; } // White on Turquoise
-            if(propTheme == 11) { themeColors = [0x000000, 0x6d876f, 0x152b19, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White on Green
+            if(propTheme == 11) { themeColors = [0x000000, 0x636451, 0x557b53, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White on Green
         } else { 
             if(propTheme == 0)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // White
             if(propTheme == 1)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Yellow
-            if(propTheme == 2)  { themeColors = [0x000000, 0x55AA55, 0x005500, 0x00FF00, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // Green
+            if(propTheme == 2)  { themeColors = [0x000000, 0x55AA55, 0x005500, 0x00FF55, 0xFFFFFF, 0x55FF55, 0x555555, 0x00FF00, 0xFF0000]; } // Green
             if(propTheme == 3)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0x00FFFF, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Turquoise
             if(propTheme == 10) { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0x0000AA, 0xFFFFFF, 0xFFFF00, 0x555555, 0x00FF00, 0xFF0000]; } // Blue
             if(propTheme == 4)  { themeColors = [0x000000, 0xAAAAAA, 0x555555, 0xFF0000, 0xFFFFFF, 0xFF0000, 0x555555, 0x00FF00, 0xFF0000]; } // Red
@@ -404,6 +433,7 @@ class Segment7View extends WatchUi.WatchFace {
         propShowClockBg = Application.Properties.getValue("showClockBg") as Boolean;
         propShowClockGradient = Application.Properties.getValue("showClockGradient") as Boolean;
         propZeropadHour = Application.Properties.getValue("zeroPadHour") as Boolean;
+        propAlwaysShowSeconds = Application.Properties.getValue("alwaysShowSeconds") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;
         propShowUnits = Application.Properties.getValue("showUnits") as Boolean;
@@ -422,6 +452,14 @@ class Segment7View extends WatchUi.WatchFace {
         dataBottomLeft = getValueByType(propFieldBottomLeft);
         dataBottomRight = getValueByType(propFieldBottomRight);
         dataBattery = getBatteryBars();
+    }
+
+    hidden function updateSeconds(now as Gregorian.Info) as Void {
+        if(isSleeping and (!propAlwaysShowSeconds or canBurnIn)) {
+            dataBottomRight = "";
+        } else {
+            dataBottomRight = now.sec.format("%02d");
+        }
     }
 
     hidden function getClockData(now as Gregorian.Info) as String {
