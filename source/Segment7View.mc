@@ -57,6 +57,7 @@ class Segment7View extends WatchUi.WatchFace {
     hidden var propShowClockGradient as Boolean = true;
     hidden var propZeropadHour as Boolean = true;
     hidden var propAlwaysShowSeconds as Boolean = false;
+    hidden var propShowBattery as Boolean = false;
 
     hidden var propHourFormat as Number = 0;
     hidden var propDateFormat as Number = 0;
@@ -316,6 +317,7 @@ class Segment7View extends WatchUi.WatchFace {
     }
 
     hidden function drawBatteryBar(dc as Dc) {
+        if(!propShowBattery) { return; }
         var text_dim = dc.getTextDimensions("}}}}}}", fontData) as [Lang.Number, Lang.Number];
         dc.setColor(themeColors[background], themeColors[background]);
         dc.fillRectangle(centerX - (text_dim[0] / 2) - textPadding, screenHeight - dataHeight - marginY, text_dim[0] + (textPadding * 2), text_dim[1]);
@@ -370,7 +372,7 @@ class Segment7View extends WatchUi.WatchFace {
         if(canBurnIn) {
             if(propTheme == 0)  { themeColors = [0x000000, 0x555555, 0x333333, 0xFFFFFF, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // White
             if(propTheme == 1)  { themeColors = [0x000000, 0x555555, 0x333333, 0xfbcb77, 0xFFFFFF, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Yellow
-            if(propTheme == 2)  { themeColors = [0x000000, 0x6e7158, 0x244b2e, 0x3fde65, 0xbff3d3, 0xfbcb77, 0x222222, 0x3fde65, 0xFF0000]; } // Green
+            if(propTheme == 2)  { themeColors = [0x000000, 0x6e7158, 0x244b2e, 0x3fde65, 0xbff3d3, 0x3fde65, 0x222222, 0x3fde65, 0xFF0000]; } // Green
             if(propTheme == 3)  { themeColors = [0x000000, 0x007181, 0x074b56, 0x00efd1, 0xFFFFFF, 0x00efd1, 0x222222, 0x3fde65, 0xFF0000]; } // Turquoise
             if(propTheme == 10) { themeColors = [0x000000, 0x005b9d, 0x003d69, 0x00d1f7, 0xFFFFFF, 0x00d1f7, 0x222222, 0x3fde65, 0xFF0000]; } // Blue
             if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0x333333, 0xdc2f43, 0xFFFFFF, 0xdc2f43, 0x222222, 0x3fde65, 0xFF0000]; } // Red
@@ -401,7 +403,7 @@ class Segment7View extends WatchUi.WatchFace {
         //                                 background pattern   clockBg   clock     dataValue accent    battBg   battBar   battEmpty
         if(propTheme == 0)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // White
         if(propTheme == 1)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Yellow
-        if(propTheme == 2)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0xFFFF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Green
+        if(propTheme == 2)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Green
         if(propTheme == 3)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FFFF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Turquoise
         if(propTheme == 10) { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0x0000FF, 0xFFFFFF, 0x0000FF, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Blue
         if(propTheme == 4)  { themeColors = [0x000000, 0x555555, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFF0000]; } // Red
@@ -434,6 +436,7 @@ class Segment7View extends WatchUi.WatchFace {
         propShowClockGradient = Application.Properties.getValue("showClockGradient") as Boolean;
         propZeropadHour = Application.Properties.getValue("zeroPadHour") as Boolean;
         propAlwaysShowSeconds = Application.Properties.getValue("alwaysShowSeconds") as Boolean;
+        propShowBattery = Application.Properties.getValue("showBattery") as Boolean;
         propHourFormat = Application.Properties.getValue("hourFormat") as Number;
         propDateFormat = Application.Properties.getValue("dateFormat") as Number;
         propShowUnits = Application.Properties.getValue("showUnits") as Boolean;

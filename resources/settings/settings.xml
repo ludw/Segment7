@@ -309,6 +309,10 @@
         <settingConfig type="boolean" />
     </setting>
 
+    <setting propertyKey="@Properties.showBattery" title="Show battery indicator">  
+        <settingConfig type="boolean" />
+    </setting>
+
     <setting propertyKey="@Properties.hourFormat" title="Time format (12/24h)">
         <settingConfig type="list">
             <listEntry value="0">Auto - Use system setting</listEntry>

@@ -30,6 +30,12 @@ https://apps.garmin.com/apps/5c6dbfb4-8ade-47a9-8355-5a7834e4c545?tid=2
 
 
 ## Change log
+2025-04-13 v1.5.2
+- Option to hide the battery indicator
+
+2025-04-12 v1.5.1
+- Fixed issue with wrong accent color in Green on Black theme
+
 2025-03-21 v1.5.0
 - Option to show seconds in bottom right field
 - Option to show seconds also in inactive mode on MIP screens

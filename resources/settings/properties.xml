@@ -14,6 +14,7 @@
     <property id="showClockGradient" type="boolean">true</property>
     <property id="showClockBg" type="boolean">true</property>
     <property id="alwaysShowSeconds" type="boolean">false</property>
+    <property id="showBattery" type="boolean">true</property>
 
     <property id="hourFormat" type="number">0</property>
     <property id="dateFormat" type="number">0</property>
